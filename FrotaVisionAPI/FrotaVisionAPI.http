@@ -1,0 +1,6 @@
+@FrotaVisionAPI_HostAddress = http://localhost:5163
+
+GET {{FrotaVisionAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
