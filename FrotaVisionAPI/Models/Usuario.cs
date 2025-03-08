@@ -9,14 +9,14 @@ namespace FrotaVisionAPI.Models
         [Key]
         public int idUsuario { get; set; }
 
-        [Required]
+        
         [StringLength(255)]
         public string email { get; set; }
 
-        [Required]
+       
         public string senha { get; set; }
 
-        [Required]
+        
         [StringLength(255)]
         public string nomeUsuario { get; set; }
 
