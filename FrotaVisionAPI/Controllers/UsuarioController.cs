@@ -80,7 +80,7 @@ namespace FrotaVisionAPI.Controllers
                 throw;
             }
 
-            return NoContent();
+            return Ok(new { message = "Usuário atualizado com sucesso", usuario = usuario });
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace FrotaVisionAPI.Controllers
             _context.Usuarios.Remove(usuario);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(new { message = "Usuário deletado com sucesso"});
         }
 
 
