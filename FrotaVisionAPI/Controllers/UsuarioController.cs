@@ -1,4 +1,5 @@
 ﻿using FrotaVisionAPI.Models;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
@@ -50,10 +51,19 @@ namespace FrotaVisionAPI.Controllers
         [SwaggerOperation(Summary = "Cria um novo usuário", Description = "Adiciona um novo usuário ao banco de dados.")]
         public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
         {
+
+            // Verifica se já existe um usuário com esse email
+            var usuarioExistente = await _context.Usuarios.FirstOrDefaultAsync(u => u.email == usuario.email);
+            if (usuarioExistente != null)
+            {
+                return Conflict(new { message = "Já existe um usuário cadastrado com esse e-mail." });
+            }
+            usuario.senha = PasswordHasher.HashPassword(usuario.senha);
+
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetUsuario), new { id = usuario.idUsuario }, usuario);
+            return CreatedAtAction(nameof(GetUsuario), new { id = usuario.id_usuario }, usuario);
         }
 
         /// <summary>
@@ -63,7 +73,7 @@ namespace FrotaVisionAPI.Controllers
         [SwaggerOperation(Summary = "Atualiza um usuário", Description = "Edita os dados de um usuário existente.")]
         public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
         {
-            if (id != usuario.idUsuario)
+            if (id != usuario.id_usuario)
                 return BadRequest(new { message = "ID do usuário não corresponde ao informado" });
 
             _context.Entry(usuario).State = EntityState.Modified;
@@ -74,7 +84,7 @@ namespace FrotaVisionAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.Usuarios.Any(e => e.idUsuario == id))
+                if (!_context.Usuarios.Any(e => e.id_usuario == id))
                     return NotFound(new { message = "Usuário não encontrado" });
 
                 throw;
@@ -100,6 +110,19 @@ namespace FrotaVisionAPI.Controllers
             return Ok(new { message = "Usuário deletado com sucesso"});
         }
 
+        [HttpPost("login/{login},{senha}")]
+        public async Task<IActionResult> Login( string login, string senha)
+        {
+            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.email == /*request.Email*/ login);
+            if (usuario == null)
+                return Unauthorized(new { message = "Usuário não encontrado" });
+
+            // Verifica se a senha informada corresponde ao hash armazenado
+            if (!PasswordHasher.VerifyPassword(/*request.Password*/ senha , usuario.senha))
+                return Unauthorized(new { message = "Senha incorreta" });
+
+            return Ok(new { message = "Login realizado com sucesso!" });
+        }
 
     }
 }

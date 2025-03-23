@@ -7,7 +7,7 @@ namespace FrotaVisionAPI.Models
     public class Usuario
     {
         [Key]
-        public int idUsuario { get; set; }
+        public int id_usuario { get; set; }
 
         
         [StringLength(255)]
@@ -18,12 +18,12 @@ namespace FrotaVisionAPI.Models
 
         
         [StringLength(255)]
-        public string nomeUsuario { get; set; }
+        public string nome_usuario { get; set; }
 
-        public DateTime dataCadastro { get; set; }
+        public DateTime data_cadastro { get; set; }
 
         public string? cnpj { get; set; }
 
-        public int? permissoesUsuario { get; set; }
+        public int? permissoes_usuario { get; set; }
     }
 }

@@ -10,11 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 
+//builder.Services.AddDbContext<AppDBContext>(options =>
+//    options.UseMySql(builder.Configuration.GetConnectionString("MySqlDatabase"),
+//        new MySqlServerVersion(new Version(8, 0, 41)) // Ajuste para a versão do seu MySQL
+//    )
+//);
+
 builder.Services.AddDbContext<AppDBContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("MySqlDatabase"),
-        new MySqlServerVersion(new Version(8, 0, 41)) // Ajuste para a versão do seu MySQL
-    )
+    options.UseNpgsql(builder.Configuration.GetConnectionString("postgresql"))
 );
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
