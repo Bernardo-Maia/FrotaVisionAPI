@@ -13,7 +13,7 @@ namespace FrotaVisionAPI.Models
         [StringLength(255)]
         public string email { get; set; }
 
-       
+
         public string senha { get; set; }
 
         
@@ -25,5 +25,6 @@ namespace FrotaVisionAPI.Models
         public string? cnpj { get; set; }
 
         public int? permissoes_usuario { get; set; }
+
     }
 }

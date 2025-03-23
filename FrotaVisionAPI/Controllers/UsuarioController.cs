@@ -51,7 +51,7 @@ namespace FrotaVisionAPI.Controllers
         [SwaggerOperation(Summary = "Cria um novo usuário", Description = "Adiciona um novo usuário ao banco de dados.")]
         public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
         {
-
+            
             // Verifica se já existe um usuário com esse email
             var usuarioExistente = await _context.Usuarios.FirstOrDefaultAsync(u => u.email == usuario.email);
             if (usuarioExistente != null)

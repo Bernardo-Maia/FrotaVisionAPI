@@ -10,6 +10,9 @@ namespace FrotaVisionAPI
 
         // Adicione aqui suas tabelas como DbSet
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Empresa> Empresas { get; set; }
+        public DbSet<Veiculo> Veiculos { get; set; }
+        public DbSet<Motorista> Motoristas { get; set; }   
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -23,6 +26,9 @@ namespace FrotaVisionAPI
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Usuario>().ToTable("usuario");
+            modelBuilder.Entity<Empresa>().ToTable("empresa");
+            modelBuilder.Entity<Motorista>().ToTable("motorista");
+            modelBuilder.Entity<Veiculo>().ToTable("veiculo");
             base.OnModelCreating(modelBuilder);
         }
     }
