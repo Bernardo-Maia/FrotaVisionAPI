@@ -12,7 +12,9 @@ namespace FrotaVisionAPI
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Empresa> Empresas { get; set; }
         public DbSet<Veiculo> Veiculos { get; set; }
-        public DbSet<Motorista> Motoristas { get; set; }   
+        public DbSet<Motorista> Motoristas { get; set; }
+        public DbSet<Viagem> Viagens { get; set; }
+        public DbSet<ManutencaoRealizada> ManutencaoRealizadas { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -29,6 +31,8 @@ namespace FrotaVisionAPI
             modelBuilder.Entity<Empresa>().ToTable("empresa");
             modelBuilder.Entity<Motorista>().ToTable("motorista");
             modelBuilder.Entity<Veiculo>().ToTable("veiculo");
+            modelBuilder.Entity<Viagem>().ToTable("viagem");
+            modelBuilder.Entity<Viagem>().ToTable("manutencao_realizada");
             base.OnModelCreating(modelBuilder);
         }
     }

@@ -8,7 +8,7 @@ namespace FrotaVisionAPI.Models
             : base(options)
         {
         }
-        public DbSet<Usuario> Usuarios { get; set; } = null!;
+        public DbSet<Motorista> Motoristas { get; set; } = null!;
     }
     
 }

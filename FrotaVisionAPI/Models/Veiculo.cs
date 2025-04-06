@@ -17,5 +17,6 @@ namespace FrotaVisionAPI.Models
         public string? cnpj { get; set; }
 
 
+
     }
 }
