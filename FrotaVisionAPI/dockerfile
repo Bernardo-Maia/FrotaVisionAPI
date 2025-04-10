@@ -18,7 +18,7 @@
  COPY --from=build /app/out .
  
  # Expõe a porta 80
- EXPOSE 80
+ EXPOSE 8080
  
  # Nome exato do DLL gerado (use o nome do seu projeto)
  ENTRYPOINT ["dotnet", "FrotaVisionAPI.dll"]
