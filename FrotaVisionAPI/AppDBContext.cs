@@ -32,7 +32,7 @@ namespace FrotaVisionAPI
             modelBuilder.Entity<Motorista>().ToTable("motorista");
             modelBuilder.Entity<Veiculo>().ToTable("veiculo");
             modelBuilder.Entity<Viagem>().ToTable("viagem");
-            modelBuilder.Entity<Viagem>().ToTable("manutencao_realizada");
+            modelBuilder.Entity<ManutencaoRealizada>().ToTable("manutencao_realizada");
             base.OnModelCreating(modelBuilder);
         }
     }
