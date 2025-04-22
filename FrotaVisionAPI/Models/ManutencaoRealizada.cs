@@ -9,6 +9,7 @@ namespace FrotaVisionAPI.Models
         [Key]
         public int id_manutencao_realizada { get; set; }
         public int id_veiculo { get; set; }
+        public double quilometragem_ultima_manutencao { get; set; }
         public DateTime data_manutencao { get; set; }
         public string? descricao { get; set; }
         public int id_manutencao { get; set; }
