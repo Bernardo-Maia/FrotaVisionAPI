@@ -14,8 +14,9 @@ namespace FrotaVisionAPI.Models
         public string descricao { get; set; }
         public string placa { get; set; }
         public string chassi { get; set; }
-        public string? cnpj { get; set; }
+        public string cnpj { get; set; }
 
+        public bool habilitado { get; set; }
 
 
     }

@@ -14,6 +14,8 @@ namespace FrotaVisionAPI.Models
         public double quilometragem_viagem { get; set; }
         public double horasMotor { get; set; }
         public int id_motorista { get; set; }
+
+        public bool habilitado { get; set; }
         public string? descricao { get; set; }
 
     }

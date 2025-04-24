@@ -11,5 +11,7 @@ namespace FrotaVisionAPI.Models
         public string nome {  get; set; }
         public string? descricao { get; set; }
         public double quilometragem_preventiva { get; set; }
+
+        public bool habilitado { get; set; }
     }
 }

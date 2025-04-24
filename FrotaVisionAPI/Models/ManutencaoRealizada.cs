@@ -17,5 +17,6 @@ namespace FrotaVisionAPI.Models
         public double valor_manutencao { get; set; }
         public double horasMotorManutencao { get; set; }
         public bool eManuntencaoPreventiva { get; set; }
+        public bool habilitado { get; set; }
     }
 }

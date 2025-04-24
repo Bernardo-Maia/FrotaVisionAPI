@@ -10,6 +10,7 @@ namespace FrotaVisionAPI.Models
         public string cnpj { get; set; }
         public string nome_social { get; set; }
         public DateTime data_cadastro { get; set; }
-        public int? id_plano { get; set; }
+        public int id_plano { get; set; }
+        public bool habilitado { get; set; }
     }
 }

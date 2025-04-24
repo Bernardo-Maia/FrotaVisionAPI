@@ -9,10 +9,8 @@ namespace FrotaVisionAPI.Models
         [Key]
         public int id_usuario { get; set; }
 
-        
         [StringLength(255)]
         public string email { get; set; }
-
 
         public string senha { get; set; }
 
@@ -22,9 +20,11 @@ namespace FrotaVisionAPI.Models
 
         public DateTime data_cadastro { get; set; }
 
-        public string? cnpj { get; set; }
+        public string cnpj { get; set; }
 
-        public int? permissoes_usuario { get; set; }
+        public int permissoes_usuario { get; set; }
+
+        public bool habilitado { get; set; }
 
     }
 }

@@ -8,6 +8,7 @@
         public string nomeManutencao { get; set; }
         public double quilometragemAtual { get; set; }
         public double quilometragemManutencao { get; set; }
+        public bool urgencia { get; set; }
 
     }
 }
