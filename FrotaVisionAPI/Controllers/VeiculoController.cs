@@ -40,6 +40,33 @@ namespace FrotaVisionAPI.Controllers
             _context.Veiculos.Add(veiculo);
             await _context.SaveChangesAsync();
 
+            // Busca todas as manutenções habilitadas
+            var manutencoes = await _context.Manutencoes
+                .Where(m => m.habilitado)
+                .ToListAsync();
+
+            // Cria uma ManutencaoRealizada para cada manutenção
+            foreach (var manutencao in manutencoes)
+            {
+                var manutencaoRealizada = new ManutencaoRealizada
+                {
+                    id_veiculo = veiculo.id_veiculo,
+                    id_manutencao = manutencao.id_manutencao,
+                    data_manutencao = DateTime.UtcNow,
+                    quilometragem_ultima_manutencao = 0,
+                    descricao = manutencao.descricao,
+                    data_cadastro = DateTime.UtcNow,
+                    valor_manutencao = 0, // valor inicial
+                    horasMotorManutencao = 0, // valor inicial
+                    eManuntencaoPreventiva = true,
+                    habilitado = true
+                };
+
+                _context.ManutencaoRealizadas.Add(manutencaoRealizada);
+            }
+
+            await _context.SaveChangesAsync();
+
             return CreatedAtAction(nameof(GetVeiculo), new { veiculo.id_veiculo }, veiculo);
         }
 

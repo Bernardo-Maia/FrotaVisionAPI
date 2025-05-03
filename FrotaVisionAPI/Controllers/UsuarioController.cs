@@ -76,6 +76,7 @@ namespace FrotaVisionAPI.Controllers
             if (id != usuario.id_usuario)
                 return BadRequest(new { message = "ID do usuário não corresponde ao informado" });
 
+            usuario.senha = PasswordHasher.HashPassword(usuario.senha);
             _context.Entry(usuario).State = EntityState.Modified;
 
             try
@@ -113,15 +114,21 @@ namespace FrotaVisionAPI.Controllers
         [HttpPost("login/{login},{senha}")]
         public async Task<IActionResult> Login( string login, string senha)
         {
-            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.email == /*request.Email*/ login);
-            if (usuario == null)
+            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.email == login);
+            if (usuario == null || usuario.habilitado == false)
                 return Unauthorized(new { message = "Usuário não encontrado" });
 
             // Verifica se a senha informada corresponde ao hash armazenado
             if (!PasswordHasher.VerifyPassword(/*request.Password*/ senha , usuario.senha))
                 return Unauthorized(new { message = "Senha incorreta" });
 
-            return Ok(new { message = "Login realizado com sucesso!" });
+            return Ok(new { message = "Login realizado com sucesso!",
+                id = usuario.id_usuario,
+                nome = usuario.nome_usuario,
+                cnpj = usuario.cnpj,
+                permissao = usuario.permissoes_usuario
+
+            });
         }
 
     }

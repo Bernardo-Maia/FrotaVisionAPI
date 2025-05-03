@@ -9,13 +9,13 @@ namespace FrotaVisionAPI.Models
         [Key]
         public int id_veiculo { get; set; }
         public string apelido { get; set; }
-        public float quilometragem { get; set; }
-        public float horas_motor { get; set; }
+        public double quilometragem { get; set; }
+        public double horas_motor { get; set; }
         public string descricao { get; set; }
         public string placa { get; set; }
         public string chassi { get; set; }
         public string cnpj { get; set; }
-
+        public int tipo { get; set; }
         public bool habilitado { get; set; }
 
 

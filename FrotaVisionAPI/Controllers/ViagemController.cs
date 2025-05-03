@@ -36,11 +36,19 @@ namespace FrotaVisionAPI.Controllers
         [HttpPost("Cadastrar")]
         public async Task<ActionResult<Viagem>> PostViagem(Viagem viagem)
         {
+            
+            var veiculo = await _context.Veiculos.FindAsync(viagem.id_veiculo);
+            if (veiculo == null)
+                return NotFound("Veículo não encontrado.");
+
+            veiculo.quilometragem += viagem.quilometragem_viagem;
 
             _context.Viagens.Add(viagem);
+            _context.Veiculos.Update(veiculo);
+
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetViagem), new { viagem.id_viagem }, viagem);
+            return CreatedAtAction(nameof(GetViagem), new { id = viagem.id_viagem }, viagem);
         }
 
         [HttpPut("Atualizar/{id}")]
