@@ -16,13 +16,31 @@ builder.Services.AddControllers();
 //    )
 //);
 
+
 builder.Services.AddDbContext<AppDBContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("postgresql"))
+    options.UseNpgsql(builder.Configuration.GetConnectionString("postgresql"),
+    x => x.CommandTimeout(60) // Define o tempo limite para comandos em segundos
+    )
 );
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000", "https://frota-vision.vercel.app")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
+
 
 var app = builder.Build();
 
@@ -32,6 +50,8 @@ var app = builder.Build();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 
