@@ -37,6 +37,7 @@ namespace FrotaVisionAPI.Controllers
                     m
                 }
             ).ToListAsync(); // executa no banco
+            var tipos = await _context.TiposCaminhao.ToListAsync();
 
             // 2. Agrupa pela combinação de veículo + tipo de manutenção
             var notificacoes = baseQuery
@@ -52,6 +53,9 @@ namespace FrotaVisionAPI.Controllers
                     // Verifica se o veículo já passou do ponto de alerta
                     bool vencida = maisRecente.v.quilometragem >= kmAlerta;
 
+                    // seleciona o tipo de caminhão
+                    var tipoCaminhao = tipos.First(t => t.id == maisRecente.v.tipo);
+
                     if (!vencida)
                         return null; // não retorna notificações desnecessárias
 
@@ -64,6 +68,8 @@ namespace FrotaVisionAPI.Controllers
                         quilometragemAtual = maisRecente.v.quilometragem,
                         quilometragemManutencao = kmLimite,
                         urgencia = maisRecente.v.quilometragem >= kmLimite,
+                        tipo_caminhao = tipoCaminhao.nome,
+                        descricao_manutencao = maisRecente.m.descricao,
                     };
                 })
                 .Where(n => n != null) // remove nulls (casos não vencidos)

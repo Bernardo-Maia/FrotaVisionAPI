@@ -32,6 +32,17 @@ namespace FrotaVisionAPI.Controllers
             return manutencaoRealizada;
         }
 
+        [HttpGet("PesquisarPorVeiculo/{ID}")]
+        public async Task<ActionResult<IEnumerable<ManutencaoRealizada>>> GetManutencaoRealizadaVeiculo(int IDVeiculo)
+        {
+            List<ManutencaoRealizada> manutencaoRealizada = await _context.ManutencaoRealizadas.Where(x => x.id_veiculo == IDVeiculo).ToListAsync();
+
+            if (manutencaoRealizada == null)
+                return NotFound(new { message = "Nenhuma manutenção para o veiculo" });
+
+            return manutencaoRealizada;
+        }
+
 
         [HttpPost("Cadastrar")]
         public async Task<ActionResult<ManutencaoRealizada>> PostManutencaoRealizada(ManutencaoRealizada manutencaoRealizada)

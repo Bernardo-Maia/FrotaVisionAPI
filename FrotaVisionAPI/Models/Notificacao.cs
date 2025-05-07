@@ -9,6 +9,9 @@
         public double quilometragemAtual { get; set; }
         public double quilometragemManutencao { get; set; }
         public bool urgencia { get; set; }
+        public string tipo_caminhao { get; set; }
+
+        public string descricao_manutencao { get; set; }
 
     }
 }

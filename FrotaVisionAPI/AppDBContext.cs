@@ -16,14 +16,15 @@ namespace FrotaVisionAPI
         public DbSet<Viagem> Viagens { get; set; }
         public DbSet<ManutencaoRealizada> ManutencaoRealizadas { get; set; }
         public DbSet<Manutencao> Manutencoes{ get; set; }
+        public DbSet<TipoCaminhão> TiposCaminhao { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseNpgsql("Host=db.apimpqpegxjlygictble.supabase.co;Database=postgres;Username=postgres;Password=frotavisionPIT;SSL Mode=Require;Trust Server Certificate=true");
-            }
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    if (!optionsBuilder.IsConfigured)
+        //    {
+        //        optionsBuilder.UseNpgsql("Host=db.apimpqpegxjlygictble.supabase.co;Database=postgres;Username=postgres;Password=frotavisionPIT;SSL Mode=Require;Trust Server Certificate=true");
+        //    }
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,6 +35,7 @@ namespace FrotaVisionAPI
             modelBuilder.Entity<Viagem>().ToTable("viagem");
             modelBuilder.Entity<ManutencaoRealizada>().ToTable("manutencao_realizada");
             modelBuilder.Entity<Manutencao>().ToTable("manutencao");
+            modelBuilder.Entity<TipoCaminhão>().ToTable("tipo_caminhao");
             base.OnModelCreating(modelBuilder);
         }
     }
