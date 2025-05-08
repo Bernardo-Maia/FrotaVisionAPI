@@ -18,5 +18,15 @@ namespace FrotaVisionAPI.Models
         public bool habilitado { get; set; }
         public string? descricao { get; set; }
 
+        public string origem { get; set; }
+
+        public string destino { get; set; }
+
+        public DateTime data_inicio { get; set; }
+
+        public DateTime data_fim { get; set; }
+
+
+
     }
 }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace FrotaVisionAPI.Models
 {
     [Table("tipo_caminhao")]
-    public class TipoCaminhão
+    public class TipoCaminhao
     {
         [Key]
 

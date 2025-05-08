@@ -22,6 +22,36 @@ namespace FrotaVisionAPI.Controllers
             return await _context.ManutencaoRealizadas.ToListAsync();
         }
 
+        [HttpGet]
+        [Route("ListarDetalhado")]
+        public async Task<ActionResult<IEnumerable<object>>> GetManutencaoRealizadaDetalhada()
+        {
+            var manutencaoRealizada = await (
+            from mr in _context.ManutencaoRealizadas
+            join m in _context.Manutencoes on mr.id_manutencao equals m.id_manutencao
+            join v in _context.Veiculos on mr.id_veiculo equals v.id_veiculo
+            where mr.habilitado == true
+            select new
+            {
+                mr.id_manutencao_realizada,
+                mr.data_manutencao,
+                mr.quilometragem_ultima_manutencao,
+                quilometragemRecomendada = mr.quilometragem_ultima_manutencao + m.quilometragem_preventiva,
+                descricaoRealizada = mr.descricao,
+                mr.data_cadastro,
+                mr.valor_manutencao,
+                mr.horasMotorManutencao,
+                mr.eManuntencaoPreventiva,
+                v.apelido,
+                v.placa,
+                v.quilometragem,
+                descricaoManutencao = m.descricao,
+                m.nome
+
+            }).ToListAsync();
+            return Ok(manutencaoRealizada);
+        }
+
         [HttpGet("Pesquisar/{ID}")]
         public async Task<ActionResult<ManutencaoRealizada>> GetManutencaoRealizada(int ID)
         {

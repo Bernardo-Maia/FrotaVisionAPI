@@ -22,6 +22,28 @@ namespace FrotaVisionAPI.Controllers
             return await _context.Veiculos.ToListAsync();
         }
 
+        [HttpGet]
+        [Route("ListarDetalhado")]
+        public async Task<ActionResult<IEnumerable<object>>> GetVeiculoDetalhado()
+        {
+            var veiculos = await (
+            from v in _context.Veiculos
+            join t in _context.TiposCaminhoes on v.tipo equals t.id
+            where v.habilitado == true
+            select new
+            {
+                v.id_veiculo,
+                v.apelido,
+                v.placa,
+                v.quilometragem,
+                v.horas_motor,
+                v.ano,
+                v.descricao,
+                tipo = t.nome
+            }).ToListAsync();
+            return Ok(veiculos);
+        }
+
         [HttpGet("Pesquisar/{id}")]
         public async Task<ActionResult<Veiculo>> GetVeiculo(int id)
         {

@@ -37,7 +37,7 @@ namespace FrotaVisionAPI.Controllers
                     m
                 }
             ).ToListAsync(); // executa no banco
-            var tipos = await _context.TiposCaminhao.ToListAsync();
+            var tipos = await _context.TiposCaminhoes.ToListAsync();
 
             // 2. Agrupa pela combinação de veículo + tipo de manutenção
             var notificacoes = baseQuery
