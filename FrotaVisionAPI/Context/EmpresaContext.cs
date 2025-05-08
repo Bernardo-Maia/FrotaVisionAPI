@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FrotaVisionAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace FrotaVisionAPI.Models
+namespace FrotaVisionAPI.Context
 {
     public class EmpresaContext : DbContext
     {
