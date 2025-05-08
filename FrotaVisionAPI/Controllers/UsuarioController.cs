@@ -8,7 +8,7 @@ using System;
 namespace FrotaVisionAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class UsuarioController : ControllerBase
     {
        
@@ -28,6 +28,27 @@ namespace FrotaVisionAPI.Controllers
         public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
         {
             return await _context.Usuarios.ToListAsync();
+        }
+
+        [HttpGet]
+        [Route("ListarDetalhado")]
+        public async Task<ActionResult<IEnumerable<object>>> GetUsuariosDetalhado()
+        {
+            var usuarios = await (
+                from u in _context.Usuarios
+                where u.habilitado == true
+                join p in _context.Permissoes on u.permissoes_usuario equals p.id_permissao
+                select new
+                {
+                    u.id_usuario,
+                    u.nome_usuario,
+                    u.email,
+                    u.cnpj,
+                    nomePermissao = p.nome,
+                    p.descricao
+                }
+            ).ToListAsync();
+            return Ok(usuarios);
         }
 
         /// <summary>

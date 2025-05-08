@@ -39,7 +39,7 @@ namespace FrotaVisionAPI.Controllers
                 v.horas_motor,
                 v.ano,
                 v.descricao,
-                tipo = t.nome
+                tipo = t.nome,
             }).ToListAsync();
             return Ok(veiculos);
         }

@@ -38,7 +38,10 @@ namespace FrotaVisionAPI.Controllers
                 v.quilometragem_viagem,
                 nome_motorista = mot.nome,
                 apelido_veiculo = veic.apelido,
-                placa_veiculo = veic.placa
+                placa_veiculo = veic.placa,
+                v.origem,
+                v.destino,
+                v.descricao
 
             }).ToListAsync();
 

@@ -10,7 +10,6 @@ namespace FrotaVisionAPI.Models
         public int id_viagem { get; set; }
 
         public int id_veiculo { get; set; }
-        public DateTime data_viagem { get; set; }
         public double quilometragem_viagem { get; set; }
         public double horasMotor { get; set; }
         public int id_motorista { get; set; }

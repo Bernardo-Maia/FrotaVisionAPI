@@ -17,6 +17,7 @@ namespace FrotaVisionAPI
         public DbSet<ManutencaoRealizada> ManutencaoRealizadas { get; set; }
         public DbSet<Manutencao> Manutencoes{ get; set; }
         public DbSet<TipoCaminhao> TiposCaminhoes { get; set; }
+        public DbSet<Permissao> Permissoes { get; set; } = null!;
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
@@ -36,6 +37,7 @@ namespace FrotaVisionAPI
             modelBuilder.Entity<ManutencaoRealizada>().ToTable("manutencao_realizada");
             modelBuilder.Entity<Manutencao>().ToTable("manutencao");
             modelBuilder.Entity<TipoCaminhao>().ToTable("tipo_caminhao");
+            modelBuilder.Entity<Permissao>().ToTable("permissoes_usuario");
             base.OnModelCreating(modelBuilder);
         }
     }

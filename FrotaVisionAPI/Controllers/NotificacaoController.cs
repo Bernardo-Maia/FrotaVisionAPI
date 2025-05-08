@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 namespace FrotaVisionAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class NotificacaoController : ControllerBase
     {
         private readonly AppDBContext _context;
