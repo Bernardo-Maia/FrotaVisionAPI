@@ -38,7 +38,7 @@ namespace FrotaVisionAPI.Controllers
         {
 
             _context.Veiculos.Add(veiculo);
-            await _context.SaveChangesAsync();
+           
 
             // Busca todas as manutenções habilitadas
             var manutencoes = await _context.Manutencoes

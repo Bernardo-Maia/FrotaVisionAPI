@@ -32,7 +32,7 @@ namespace FrotaVisionAPI.Controllers
             return manutencaoRealizada;
         }
 
-        [HttpGet("PesquisarPorVeiculo/{ID}")]
+        [HttpGet("PesquisarPorVeiculo/{IDVeiculo}")]
         public async Task<ActionResult<IEnumerable<ManutencaoRealizada>>> GetManutencaoRealizadaVeiculo(int IDVeiculo)
         {
             List<ManutencaoRealizada> manutencaoRealizada = await _context.ManutencaoRealizadas.Where(x => x.id_veiculo == IDVeiculo).ToListAsync();
