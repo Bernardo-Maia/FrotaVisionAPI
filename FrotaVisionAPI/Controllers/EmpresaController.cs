@@ -89,12 +89,14 @@ namespace FrotaVisionAPI.Controllers
         {
             var empresa = await _context.Empresas.FindAsync(cnpj);
             if (empresa == null)
-                return NotFound(new { message = "Empresa não encontrado" });
+                return NotFound(new { message = "Empresa não encontrada" });
 
-            _context.Empresas.Remove(empresa);
+            empresa.habilitado = false;
+            _context.Entry(empresa).State = EntityState.Modified;
+
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Empresas deletado com sucesso" });
+            return Ok(new { message = "Empresa desativada com sucesso" });
         }
 
     }

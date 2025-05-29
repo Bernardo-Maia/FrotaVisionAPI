@@ -112,18 +112,21 @@ namespace FrotaVisionAPI.Controllers
 
         [HttpDelete("Deletar/{id}")]
         [SwaggerOperation(Summary = "Remove um manutencaoRealizada", Description = "Deleta um manutencaoRealizada do banco de dados.")]
-        public async Task<IActionResult> DeleteUsuario(int id)
+        public async Task<IActionResult> DeleteManutencaoRealizada(int id)
         {
             var manutencaoRealizada = await _context.ManutencaoRealizadas.FindAsync(id);
             if (manutencaoRealizada == null)
-                return NotFound(new { message = "ManutencaoRealizada não encontrado" });
+                return NotFound(new { message = "ManutencaoRealizada não encontrada" });
 
-            _context.ManutencaoRealizadas.Remove(manutencaoRealizada);
+            manutencaoRealizada.habilitado = false;
+            _context.Entry(manutencaoRealizada).State = EntityState.Modified;
+
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "ManutencaoRealizada deletado com sucesso" });
+            return Ok(new { message = "ManutencaoRealizada desativada com sucesso" });
         }
-
-
     }
+
+
+    
 }

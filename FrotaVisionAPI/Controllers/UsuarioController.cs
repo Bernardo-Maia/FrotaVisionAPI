@@ -126,10 +126,12 @@ namespace FrotaVisionAPI.Controllers
             if (usuario == null)
                 return NotFound(new { message = "Usuário não encontrado" });
 
-            _context.Usuarios.Remove(usuario);
+            usuario.habilitado = false;
+            _context.Entry(usuario).State = EntityState.Modified;
+
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Usuário deletado com sucesso"});
+            return Ok(new { message = "Usuário desabilitado com sucesso" });
         }
 
         [HttpPost("login/{login},{senha}")]

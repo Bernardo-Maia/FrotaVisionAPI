@@ -103,16 +103,18 @@ namespace FrotaVisionAPI.Controllers
 
         [HttpDelete("Deletar/{id}")]
         [SwaggerOperation(Summary = "Remove uma viagem", Description = "Deleta uma viagem do banco de dados.")]
-        public async Task<IActionResult> DeleteUsuario(int id)
+        public async Task<IActionResult> DeleteViagem(int id)
         {
             var viagem = await _context.Viagens.FindAsync(id);
             if (viagem == null)
-                return NotFound(new { message = "viagem não encontrada" });
+                return NotFound(new { message = "Viagem não encontrada" });
 
-            _context.Viagens.Remove(viagem);
+            viagem.habilitado = false;
+            _context.Entry(viagem).State = EntityState.Modified;
+
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "viagem deletada com sucesso" });
+            return Ok(new { message = "Viagem desativada com sucesso" });
         }
 
 
