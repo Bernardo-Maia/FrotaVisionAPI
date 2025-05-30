@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FrotaVisionAPI.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class TipoCaminhaoController : ControllerBase
     {
         private readonly AppDBContext _context;

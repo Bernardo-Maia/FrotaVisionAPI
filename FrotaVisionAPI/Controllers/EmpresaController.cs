@@ -27,7 +27,7 @@ namespace FrotaVisionAPI.Controllers
         }
 
         [HttpGet("Pesquisar/{cnpj}")]
-        [SwaggerOperation(Summary = "Obtém uma empresa", Description = "Retorna uma emrpesa pelo ID informado.")]
+        [SwaggerOperation(Summary = "Obtém uma empresa", Description = "Retorna uma empresa pelo ID informado.")]
         public async Task<ActionResult<Empresa>> GetEmpresa(string cnpj)
         {
             var empresa = await _context.Empresas.FindAsync(cnpj);
