@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Runtime.CompilerServices;
 
 namespace FrotaVisionAPI.Controllers
 {
@@ -20,7 +19,7 @@ namespace FrotaVisionAPI.Controllers
         [HttpGet]
         [Route("Notifacar")]
         [SwaggerOperation(Summary = "Gera a lista de notificação", Description = "")]
-       
+
         public async Task<ActionResult<IEnumerable<Notificacao>>> GerarNotificacoes(string cnpj)
         {
             // 1. Pega TODAS as manutenções relacionadas aos veículos do CNPJ
@@ -28,13 +27,15 @@ namespace FrotaVisionAPI.Controllers
                 from mr in _context.ManutencaoRealizadas
                 join v in _context.Veiculos on mr.id_veiculo equals v.id_veiculo
                 join m in _context.Manutencoes on mr.id_manutencao equals m.id_manutencao
+                //join vi in _context.Viagens on v.id_veiculo equals vi.id_veiculo
                 where v.cnpj == cnpj
                 && v.habilitado == true
                 select new
                 {
                     mr,
                     v,
-                    m
+                    m,
+                    //vi
                 }
             ).ToListAsync(); // executa no banco
             var tipos = await _context.TiposCaminhoes.ToListAsync();
@@ -70,6 +71,8 @@ namespace FrotaVisionAPI.Controllers
                         urgencia = maisRecente.v.quilometragem >= kmLimite,
                         tipo_caminhao = tipoCaminhao.nome,
                         descricao_manutencao = maisRecente.m.descricao,
+                        //data_viagem = maisRecente.vi.data_fim.ToString("dd/MM/yyyy"),
+                        idManutencaoRealizada = maisRecente.mr.id_manutencao
                     };
                 })
                 .Where(n => n != null) // remove nulls (casos não vencidos)

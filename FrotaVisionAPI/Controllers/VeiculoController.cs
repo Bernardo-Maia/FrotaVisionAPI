@@ -26,6 +26,8 @@ namespace FrotaVisionAPI.Controllers
         [Route("ListarDetalhado")]
         public async Task<ActionResult<IEnumerable<object>>> GetVeiculoDetalhado()
         {
+
+
             var veiculos = await (
             from v in _context.Veiculos
             join t in _context.TiposCaminhoes on v.tipo equals t.id
@@ -52,6 +54,95 @@ namespace FrotaVisionAPI.Controllers
                 return NotFound(new { message = "Veiculo não encontrado" });
 
             return veiculo;
+        }
+
+        [HttpGet("PesquisarDetalhado/{id}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetVeiculoDetalhado(int id)
+        {
+            var veiculo = await _context.Veiculos.FindAsync(id);
+            var cnpj = veiculo.cnpj;
+
+            if (cnpj == null)
+                return NotFound(new { message = "Veiculo não encontrado" });
+
+            var countManutencao = await _context.ManutencaoRealizadas.CountAsync(mr => mr.habilitado == true && mr.id_veiculo == id);
+
+            var ultimaManutencao = await _context.ManutencaoRealizadas
+                .Where(m => m.id_veiculo == id && m.habilitado == true)
+                .OrderByDescending(m => m.data_manutencao).FirstOrDefaultAsync();
+
+            var nomeUltimaManutencao = await _context.Manutencoes
+                .Where(m => m.id_manutencao == ultimaManutencao.id_manutencao)
+                .Select(m => m.nome)
+                .FirstOrDefaultAsync();
+
+
+            var notificacaoController = new NotificacaoController(_context);
+
+            var notificacoes = await notificacaoController.GerarNotificacoes(cnpj);
+
+            var ultimaNotificacao = notificacoes.Value.OrderBy(x => x.quilometragemManutencao).FirstOrDefault(x => x.id_veiculo == id);
+
+            var ultimaManutencaoUrgenteNome = await _context.Manutencoes
+                .Where(m => m.id_manutencao == ultimaNotificacao.id_manutencao)
+                .Select(m => m.nome)
+                .FirstOrDefaultAsync();
+
+            var ultimaManutencaoUrgenteData = await _context.ManutencaoRealizadas
+                .Where(m => m.id_manutencao_realizada == ultimaNotificacao.idManutencaoRealizada && m.habilitado == true)
+                .OrderByDescending(m => m.data_manutencao)
+                .Select(m => m.data_manutencao)
+                .FirstOrDefaultAsync();
+
+            var notificacoescount = notificacoes.Value.Where(x => x.id_veiculo == id);
+
+            var countViagens = await _context.Viagens.CountAsync(v => v.id_veiculo == id && v.habilitado == true);
+            var NomeUltimoMotorista = "Sem viagens registradas";
+
+            var ultimaViagemData = "Sem viagens registradas";
+            if (countViagens != 0) {
+
+                var ultimaViagem = await _context.Viagens
+                    .Where(v => v.id_veiculo == id && v.habilitado == true)
+                    .OrderByDescending(v => v.data_fim)
+                    .FirstOrDefaultAsync();
+
+                ultimaViagemData = await _context.Viagens
+                .Where(v => v.id_veiculo == id && v.habilitado == true)
+                .OrderByDescending(v => v.data_fim)
+                .Select(x => x.data_fim.ToString("dd/MM/yyyy"))
+                .FirstOrDefaultAsync();
+
+                NomeUltimoMotorista = await _context.Motoristas
+                .Where(m => m.id_motorista == ultimaViagem.id_motorista)
+                .Select(m => m.nome)
+                .FirstOrDefaultAsync();
+
+                 
+            }
+           
+
+                var resposta = new
+                {
+                    cnpj = cnpj,
+                    veiculo = veiculo,
+                    countManutencao = countManutencao,
+                    countViagens = countViagens,
+                    countUrgente = notificacoescount.Count(),
+                    nomeUltimaManitencao = nomeUltimaManutencao,
+                    dataUltimaManutecao = ultimaManutencao.data_manutencao.ToString("dd/MM/yyyy"),
+                    ultimaManutencaoUrgenteNome = ultimaManutencaoUrgenteNome,
+                    ultimaMantuenacaoUrgenteData = ultimaManutencaoUrgenteData.ToString("dd/MM/yyyy"),
+                    ultimaViagemData = ultimaViagemData,
+                    ultimaViagemMotorista = NomeUltimoMotorista,
+
+
+                };
+
+
+
+            return Ok(resposta);
+            
         }
 
 

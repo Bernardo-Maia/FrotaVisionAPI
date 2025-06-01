@@ -27,10 +27,8 @@ namespace FrotaVisionAPI.Controllers
             return Ok(planos);
         }
 
-
         [HttpGet]
         [Route("Pesquisar/{id}")]
-
         public async Task<ActionResult<Plano>> Getplano(int id)
         {
             var plano = await _context.Planos.FindAsync(id);

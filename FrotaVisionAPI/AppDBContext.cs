@@ -8,7 +8,7 @@ namespace FrotaVisionAPI
     {
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options) { }
 
-        // Adicione aqui suas tabelas como DbSet
+        // tabelas como DbSet
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Empresa> Empresas { get; set; }
         public DbSet<Veiculo> Veiculos { get; set; }
@@ -21,14 +21,8 @@ namespace FrotaVisionAPI
 
         public DbSet<Models.Plano> Planos{ get; set; }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    if (!optionsBuilder.IsConfigured)
-        //    {
-        //        optionsBuilder.UseNpgsql("Host=db.apimpqpegxjlygictble.supabase.co;Database=postgres;Username=postgres;Password=frotavisionPIT;SSL Mode=Require;Trust Server Certificate=true");
-        //    }
-        //}
-
+        
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Usuario>().ToTable("usuario");
