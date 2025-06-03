@@ -25,6 +25,7 @@ namespace FrotaVisionAPI.Models
 
         public DateTime data_fim { get; set; }
 
+        public string cnpj { get; set; }
 
 
     }

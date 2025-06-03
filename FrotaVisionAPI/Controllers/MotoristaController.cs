@@ -16,42 +16,50 @@ namespace FrotaVisionAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Listar")]
-        public async Task<ActionResult<IEnumerable<Motorista>>> GetMotorista()
+        [Route("Listar/{cnpj}")]
+        public async Task<ActionResult<IEnumerable<Motorista>>> GetMotorista(string cnpj)
         {
-            return await _context.Motoristas.ToListAsync();
+            return await _context.Motoristas.Where(x => x.cnpj == cnpj).ToListAsync();
         }
 
         [HttpGet]
-        [Route("ListarDetalhado")]
-        public async Task<ActionResult<IEnumerable<object>>> GetMotoristaDetalhado()
+        [Route("ListarDetalhado/{cnpj}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetMotoristaDetalhado(string cnpj)
         {
-            var motoristas = await (
-                from m in _context.Motoristas
-                where m.habilitado == true
 
-                // Viagem mais recente de cada motorista
-                let ultimaViagem = (
-                    from v in _context.Viagens
-                    where v.id_motorista == m.id_motorista
-                    orderby v.data_fim descending
-                    select v
-                ).FirstOrDefault()
+            try
+            {
+                var motoristas = await (
+                    from m in _context.Motoristas
+                    where m.habilitado == true && m.cnpj == cnpj
 
-                join ve in _context.Veiculos on ultimaViagem.id_veiculo equals ve.id_veiculo into veiculoJoin
-                from veiculo in veiculoJoin.DefaultIfEmpty()
+                    // Viagem mais recente de cada motorista
+                    let ultimaViagem = (
+                        from v in _context.Viagens
+                        where v.id_motorista == m.id_motorista
+                        orderby v.data_fim descending
+                        select v
+                    ).FirstOrDefault()
 
-                select new
-                {
-                    m.id_motorista,
-                    m.nome,
-                    data_ultima_viagem = ultimaViagem.data_fim,
-                    veiculo.placa,
-                    veiculo.apelido
-                }
-            ).ToListAsync();
+                    join ve in _context.Veiculos on ultimaViagem.id_veiculo equals ve.id_veiculo into veiculoJoin
+                    from veiculo in veiculoJoin.DefaultIfEmpty()
 
-            return Ok(motoristas);
+                    select new
+                    {
+                        m.id_motorista,
+                        m.nome,
+                        data_ultima_viagem = ultimaViagem.data_fim,
+                        veiculo.placa,
+                        veiculo.apelido
+                    }
+                ).ToListAsync();
+
+                return Ok(motoristas);
+            }
+            catch
+            {
+                return BadRequest(new { message = "Erro ao listar motoristas" });
+            }
         }
 
         [HttpGet("Pesquisar/{ID}")]

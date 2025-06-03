@@ -16,15 +16,15 @@ namespace FrotaVisionAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Listar")]
-        public async Task<ActionResult<IEnumerable<ManutencaoRealizada>>> GetManutencaoRealizada()
+        [Route("Listar/{cnpj}")]
+        public async Task<ActionResult<IEnumerable<ManutencaoRealizada>>> GetManutencaoRealizada(string cnpj)
         {
-            return await _context.ManutencaoRealizadas.ToListAsync();
+            return await _context.ManutencaoRealizadas.Where(x => x.cnpj == cnpj) .ToListAsync();
         }
 
         [HttpGet]
-        [Route("ListarDetalhado")]
-        public async Task<ActionResult<IEnumerable<object>>> GetManutencaoRealizadaDetalhada()
+        [Route("ListarDetalhado/{cnpj}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetManutencaoRealizadaDetalhada(string cnpj)
         {
             return Ok(await (
             from mr in _context.ManutencaoRealizadas
@@ -33,6 +33,7 @@ namespace FrotaVisionAPI.Controllers
             join t in _context.TiposCaminhoes on v.tipo equals t.id
             where v.habilitado == true
             where mr.habilitado == true
+            where v.cnpj == cnpj
             select new
             {
                 mr.id_manutencao_realizada,

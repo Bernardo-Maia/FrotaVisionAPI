@@ -71,11 +71,10 @@ namespace FrotaVisionAPI.Controllers
                         urgencia = maisRecente.v.quilometragem >= kmLimite,
                         tipo_caminhao = tipoCaminhao.nome,
                         descricao_manutencao = maisRecente.m.descricao,
-                        //data_viagem = maisRecente.vi.data_fim.ToString("dd/MM/yyyy"),
                         idManutencaoRealizada = maisRecente.mr.id_manutencao
                     };
                 })
-                .Where(n => n != null) // remove nulls (casos não vencidos)
+                .Where(n => n != null) 
                 .ToList();
 
             return notificacoes;

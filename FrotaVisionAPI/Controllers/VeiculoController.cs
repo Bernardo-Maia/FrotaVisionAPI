@@ -16,22 +16,22 @@ namespace FrotaVisionAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Listar")]
-        public async Task<ActionResult<IEnumerable<Veiculo>>> GetVeiculo()
+        [Route("Listar/{cnpj}")]
+        public async Task<ActionResult<IEnumerable<Veiculo>>> GetVeiculo(string cnpj)
         {
-            return await _context.Veiculos.ToListAsync();
+            return await _context.Veiculos.Where(x => x.cnpj == cnpj).ToListAsync();
         }
 
         [HttpGet]
-        [Route("ListarDetalhado")]
-        public async Task<ActionResult<IEnumerable<object>>> GetVeiculoDetalhado()
+        [Route("ListarDetalhado/{cnpj}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetVeiculoDetalhado(string cnpj)
         {
 
 
             var veiculos = await (
             from v in _context.Veiculos
             join t in _context.TiposCaminhoes on v.tipo equals t.id
-            where v.habilitado == true
+            where v.habilitado == true && v.cnpj == cnpj
             select new
             {
                 v.id_veiculo,

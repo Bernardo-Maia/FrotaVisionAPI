@@ -16,10 +16,10 @@ namespace FrotaVisionAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Listar")]
-        public async Task<ActionResult<IEnumerable<Viagem>>> GetViagem()
+        [Route("Listar/{cnpj}")]
+        public async Task<ActionResult<IEnumerable<Viagem>>> GetViagem(string cnpj)
         {
-            return await _context.Viagens.ToListAsync();
+            return await _context.Viagens.Where(x => x.cnpj == cnpj).ToListAsync();
         }
 
         [HttpGet]

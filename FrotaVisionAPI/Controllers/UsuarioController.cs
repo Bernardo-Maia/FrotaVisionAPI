@@ -23,20 +23,21 @@ namespace FrotaVisionAPI.Controllers
         /// Lista todos os usuários.
         /// </summary>
         [HttpGet]
-        [Route("Listar")]
+        [Route("Listar/{cnpj}")]
         [SwaggerOperation(Summary = "Lista todos os usuários", Description = "Retorna todos os usuários cadastrados.")]
-        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
+        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios(string cnpj)
         {
-            return await _context.Usuarios.ToListAsync();
+            var teset = _context.Usuarios.ToListAsync();
+            return await _context.Usuarios.Where(x => x.cnpj == cnpj).ToListAsync();
         }
 
         [HttpGet]
-        [Route("ListarDetalhado")]
-        public async Task<ActionResult<IEnumerable<object>>> GetUsuariosDetalhado()
+        [Route("ListarDetalhado/{cnpj}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetUsuariosDetalhado(string cnpj)
         {
             var usuarios = await (
                 from u in _context.Usuarios
-                where u.habilitado == true
+                where u.habilitado == true && u.cnpj == cnpj
                 join p in _context.Permissoes on u.permissoes_usuario equals p.id_permissao
                 select new
                 {
