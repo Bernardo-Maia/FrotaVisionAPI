@@ -11,7 +11,7 @@
         public bool urgencia { get; set; }
         public string tipo_caminhao { get; set; }
         public int idManutencaoRealizada { get; set; }
-        public string data_viagem { get; set; }
+        public DateTime data_Manutencao { get; set; }
         public string descricao_manutencao { get; set; }
 
     }

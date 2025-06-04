@@ -17,7 +17,7 @@ namespace FrotaVisionAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Notifacar/{cnpj}")]
+        [Route("Notificar/{cnpj}")]
         [SwaggerOperation(Summary = "Gera a lista de notificação", Description = "")]
 
         public async Task<ActionResult<IEnumerable<Notificacao>>> GerarNotificacoes(string cnpj)
@@ -71,7 +71,8 @@ namespace FrotaVisionAPI.Controllers
                         urgencia = maisRecente.v.quilometragem >= kmLimite,
                         tipo_caminhao = tipoCaminhao.nome,
                         descricao_manutencao = maisRecente.m.descricao,
-                        idManutencaoRealizada = maisRecente.mr.id_manutencao
+                        idManutencaoRealizada = maisRecente.mr.id_manutencao,
+                        data_Manutencao = maisRecente.mr.data_manutencao
                     };
                 })
                 .Where(n => n != null) 
