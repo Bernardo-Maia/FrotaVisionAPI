@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
+using System.Numerics;
 
 namespace FrotaVisionAPI.Controllers
 {
@@ -34,7 +35,7 @@ namespace FrotaVisionAPI.Controllers
         [Route("ListarDetalhado/{cnpj}")]
         public async Task<ActionResult<IEnumerable<object>>> GetUsuariosDetalhado(string cnpj)
         {
-            var usuarios = await (
+            return Ok(await (
                 from u in _context.Usuarios
                 where u.habilitado == true && u.cnpj == cnpj
                 join p in _context.Permissoes on u.permissoes_usuario equals p.id_permissao
@@ -47,8 +48,7 @@ namespace FrotaVisionAPI.Controllers
                     nomePermissao = p.nome,
                     p.descricao
                 }
-            ).ToListAsync();
-            return Ok(usuarios);
+            ).ToListAsync());
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace FrotaVisionAPI.Controllers
         [SwaggerOperation(Summary = "Obtém um usuário", Description = "Retorna um usuário pelo ID informado.")]
         public async Task<ActionResult<Usuario>> GetUsuario(int id)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
+            Usuario? usuario = await _context.Usuarios.FindAsync(id);
             if (usuario == null)
                 return NotFound(new { message = "Usuário não encontrado" });
 
@@ -72,9 +72,19 @@ namespace FrotaVisionAPI.Controllers
         [SwaggerOperation(Summary = "Cria um novo usuário", Description = "Adiciona um novo usuário ao banco de dados.")]
         public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
         {
-            
+            int? planoEmpresa = _context.Empresas.FindAsync(usuario.cnpj).Result?.id_plano ?? 0;
+
+            if (planoEmpresa == 0)
+                return NotFound(new { message = "Empresa não encontrada" });
+
+            int qntdUsuarios = _context.Usuarios.Count(u => u.cnpj == usuario.cnpj && u.habilitado == true);
+            int? limite = _context.Planos.Where(p => p.id_plano == planoEmpresa).FirstOrDefault()?.qntd_usuarios ?? null;
+
+            if (limite == null || limite <= qntdUsuarios)
+                return BadRequest(new { message = "Limite de usuarios atingido" });
+
             // Verifica se já existe um usuário com esse email
-            var usuarioExistente = await _context.Usuarios.FirstOrDefaultAsync(u => u.email == usuario.email);
+            Usuario? usuarioExistente = await _context.Usuarios.FirstOrDefaultAsync(u => u.email == usuario.email);
             if (usuarioExistente != null)
             {
                 return Conflict(new { message = "Já existe um usuário cadastrado com esse e-mail." });
@@ -122,7 +132,7 @@ namespace FrotaVisionAPI.Controllers
         [SwaggerOperation(Summary = "Remove um usuário", Description = "Deleta um usuário do banco de dados.")]
         public async Task<IActionResult> DeleteUsuario(int id)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
+            Usuario? usuario = await _context.Usuarios.FindAsync(id);
             if (usuario == null)
                 return NotFound(new { message = "Usuário não encontrado" });
 
@@ -137,7 +147,7 @@ namespace FrotaVisionAPI.Controllers
         [HttpPost("login/{login},{senha}")]
         public async Task<IActionResult> Login( string login, string senha)
         {
-            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.email == login);
+            Usuario? usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.email == login);
             if (usuario == null || usuario.habilitado == false)
                 return Unauthorized(new { message = "Usuário não encontrado" });
 

@@ -21,7 +21,7 @@ namespace FrotaVisionAPI.Controllers
         [Route("Listar")]
         public async Task<ActionResult<IEnumerable<Plano>>> GetPlano()
         {
-            var planos = await _context.Planos.ToListAsync();
+            List<Plano> planos = await _context.Planos.ToListAsync();
             if (planos == null)
                 return NotFound(new { message = "Nenhum tipo de caminhão encontrado" });
             return Ok(planos);
@@ -31,7 +31,7 @@ namespace FrotaVisionAPI.Controllers
         [Route("Pesquisar/{id}")]
         public async Task<ActionResult<Plano>> Getplano(int id)
         {
-            var plano = await _context.Planos.FindAsync(id);
+            Plano? plano = await _context.Planos.FindAsync(id);
             if (plano == null)
                 return NotFound(new { message = "Plano não encontrado" });
 

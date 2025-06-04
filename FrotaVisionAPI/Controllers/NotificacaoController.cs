@@ -38,7 +38,7 @@ namespace FrotaVisionAPI.Controllers
                     //vi
                 }
             ).ToListAsync(); // executa no banco
-            var tipos = await _context.TiposCaminhoes.ToListAsync();
+            List<TipoCaminhao> tipos = await _context.TiposCaminhoes.ToListAsync();
 
             // 2. Agrupa pela combinação de veículo + tipo de manutenção
             var notificacoes = baseQuery
@@ -48,14 +48,14 @@ namespace FrotaVisionAPI.Controllers
                     // Pega a manutenção mais recente (maior data)
                     var maisRecente = g.OrderByDescending(x => x.mr.data_manutencao).First();
 
-                    var kmLimite = maisRecente.mr.quilometragem_ultima_manutencao + maisRecente.m.quilometragem_preventiva;
-                    var kmAlerta = maisRecente.mr.quilometragem_ultima_manutencao + (maisRecente.m.quilometragem_preventiva * 0.8);
+                    double kmLimite = maisRecente.mr.quilometragem_ultima_manutencao + maisRecente.m.quilometragem_preventiva;
+                    double kmAlerta = maisRecente.mr.quilometragem_ultima_manutencao + (maisRecente.m.quilometragem_preventiva * 0.8);
 
                     // Verifica se o veículo já passou do ponto de alerta
                     bool vencida = maisRecente.v.quilometragem >= kmAlerta;
 
                     // seleciona o tipo de caminhão
-                    var tipoCaminhao = tipos.First(t => t.id == maisRecente.v.tipo);
+                    TipoCaminhao tipoCaminhao = tipos.First(t => t.id == maisRecente.v.tipo);
 
                     if (!vencida)
                         return null; // não retorna notificações desnecessárias

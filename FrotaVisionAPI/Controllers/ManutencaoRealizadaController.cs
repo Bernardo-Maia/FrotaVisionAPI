@@ -58,7 +58,7 @@ namespace FrotaVisionAPI.Controllers
         [HttpGet("Pesquisar/{ID}")]
         public async Task<ActionResult<ManutencaoRealizada>> GetManutencaoRealizada(int ID)
         {
-            var manutencaoRealizada = await _context.ManutencaoRealizadas.FindAsync(ID);
+            ManutencaoRealizada? manutencaoRealizada = await _context.ManutencaoRealizadas.FindAsync(ID);
             if (manutencaoRealizada == null)
                 return NotFound(new { message = "ManutencaoRealizada não encontrado" });
 
@@ -115,7 +115,7 @@ namespace FrotaVisionAPI.Controllers
         [SwaggerOperation(Summary = "Remove um manutencaoRealizada", Description = "Deleta um manutencaoRealizada do banco de dados.")]
         public async Task<IActionResult> DeleteManutencaoRealizada(int id)
         {
-            var manutencaoRealizada = await _context.ManutencaoRealizadas.FindAsync(id);
+            ManutencaoRealizada? manutencaoRealizada = await _context.ManutencaoRealizadas.FindAsync(id);
             if (manutencaoRealizada == null)
                 return NotFound(new { message = "ManutencaoRealizada não encontrada" });
 

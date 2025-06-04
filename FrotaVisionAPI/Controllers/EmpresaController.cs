@@ -30,7 +30,7 @@ namespace FrotaVisionAPI.Controllers
         [SwaggerOperation(Summary = "Obtém uma empresa", Description = "Retorna uma empresa pelo ID informado.")]
         public async Task<ActionResult<Empresa>> GetEmpresa(string cnpj)
         {
-            var empresa = await _context.Empresas.FindAsync(cnpj);
+            Empresa? empresa = await _context.Empresas.FindAsync(cnpj);
             if (empresa == null)
                 return NotFound(new { message = "Empresa não encontrado" });
 
@@ -87,7 +87,7 @@ namespace FrotaVisionAPI.Controllers
         [SwaggerOperation(Summary = "Remove uma empresa", Description = "Deleta uma empresa do banco de dados.")]
         public async Task<IActionResult> DeleteEmpresa(string cnpj)
         {
-            var empresa = await _context.Empresas.FindAsync(cnpj);
+            Empresa? empresa = await _context.Empresas.FindAsync(cnpj);
             if (empresa == null)
                 return NotFound(new { message = "Empresa não encontrada" });
 

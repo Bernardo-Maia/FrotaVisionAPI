@@ -29,7 +29,8 @@ namespace FrotaVisionAPI.Controllers
 
             try
             {
-                var motoristas = await (
+
+                return Ok(await (
                     from m in _context.Motoristas
                     where m.habilitado == true && m.cnpj == cnpj
 
@@ -52,9 +53,7 @@ namespace FrotaVisionAPI.Controllers
                         veiculo.placa,
                         veiculo.apelido
                     }
-                ).ToListAsync();
-
-                return Ok(motoristas);
+                ).ToListAsync());
             }
             catch
             {
@@ -65,7 +64,7 @@ namespace FrotaVisionAPI.Controllers
         [HttpGet("Pesquisar/{ID}")]
         public async Task<ActionResult<Motorista>> GetMotorista(int ID)
         {
-            var motorista = await _context.Motoristas.FindAsync(ID);
+            Motorista? motorista = await _context.Motoristas.FindAsync(ID);
             if (motorista == null)
                 return NotFound(new { message = "Motorista não encontrado" });
 
@@ -111,7 +110,7 @@ namespace FrotaVisionAPI.Controllers
         [SwaggerOperation(Summary = "Remove um motorista", Description = "Deleta um motorista do banco de dados.")]
         public async Task<IActionResult> DeleMotorista(int id)
         {
-            var motorista = await _context.Motoristas.FindAsync(id);
+            Motorista? motorista = await _context.Motoristas.FindAsync(id);
             if (motorista == null)
                 return NotFound(new { message = "Motorista não encontrado" });
 

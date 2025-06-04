@@ -19,7 +19,7 @@ namespace FrotaVisionAPI.Controllers
         [Route("Listar")]
         public async Task<ActionResult<IEnumerable<TipoCaminhao>>> GetTipoCaminhao()
         {
-            var tipos = await _context.TiposCaminhoes.ToListAsync();
+            List<TipoCaminhao> tipos = await _context.TiposCaminhoes.ToListAsync();
             if (tipos == null)
                 return NotFound(new { message = "Nenhum tipo de caminhão encontrado" });
             return Ok(tipos);

@@ -26,7 +26,8 @@ namespace FrotaVisionAPI.Controllers
         [Route("ListarDetalhado")]
         public async Task<ActionResult<IEnumerable<object>>> GetViagemDetalhada()
         {
-            var viagens = await (
+
+            return Ok(await (
             from v in _context.Viagens
             join veic in _context.Veiculos on v.id_veiculo equals veic.id_veiculo
             join mot in _context.Motoristas on v.id_motorista equals mot.id_motorista
@@ -43,16 +44,14 @@ namespace FrotaVisionAPI.Controllers
                 v.destino,
                 v.descricao
 
-            }).ToListAsync();
-
-            return Ok(viagens);
+            }).ToListAsync());
         }
 
 
         [HttpGet("Pesquisar/{id}")]
         public async Task<ActionResult<Viagem>> GetViagem(int id)
         {
-            var viagem = await _context.Viagens.FindAsync(id);
+            Viagem? viagem = await _context.Viagens.FindAsync(id);
             if (viagem == null)
                 return NotFound(new { message = "Viagem não encontrada" });
 
@@ -63,8 +62,8 @@ namespace FrotaVisionAPI.Controllers
         [HttpPost("Cadastrar")]
         public async Task<ActionResult<Viagem>> PostViagem(Viagem viagem)
         {
-            
-            var veiculo = await _context.Veiculos.FindAsync(viagem.id_veiculo);
+
+            Veiculo? veiculo = await _context.Veiculos.FindAsync(viagem.id_veiculo);
             if (veiculo == null)
                 return NotFound("Veículo não encontrado.");
 
@@ -105,7 +104,7 @@ namespace FrotaVisionAPI.Controllers
         [SwaggerOperation(Summary = "Remove uma viagem", Description = "Deleta uma viagem do banco de dados.")]
         public async Task<IActionResult> DeleteViagem(int id)
         {
-            var viagem = await _context.Viagens.FindAsync(id);
+            Viagem? viagem = await _context.Viagens.FindAsync(id);
             if (viagem == null)
                 return NotFound(new { message = "Viagem não encontrada" });
 
