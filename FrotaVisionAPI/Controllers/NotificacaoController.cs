@@ -17,7 +17,7 @@ namespace FrotaVisionAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Notifacar")]
+        [Route("Notifacar/{cnpj}")]
         [SwaggerOperation(Summary = "Gera a lista de notificação", Description = "")]
 
         public async Task<ActionResult<IEnumerable<Notificacao>>> GerarNotificacoes(string cnpj)

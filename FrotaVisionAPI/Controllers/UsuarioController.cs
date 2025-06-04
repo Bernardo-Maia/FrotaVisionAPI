@@ -27,7 +27,6 @@ namespace FrotaVisionAPI.Controllers
         [SwaggerOperation(Summary = "Lista todos os usuários", Description = "Retorna todos os usuários cadastrados.")]
         public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios(string cnpj)
         {
-            var teset = _context.Usuarios.ToListAsync();
             return await _context.Usuarios.Where(x => x.cnpj == cnpj).ToListAsync();
         }
 
@@ -85,7 +84,7 @@ namespace FrotaVisionAPI.Controllers
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetUsuario), new { id = usuario.id_usuario }, usuario);
+            return CreatedAtAction(nameof(PostUsuario), new { id = usuario.id_usuario }, usuario);
         }
 
         /// <summary>

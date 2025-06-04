@@ -151,8 +151,8 @@ namespace FrotaVisionAPI.Controllers
         {
 
             _context.Veiculos.Add(veiculo);
-           
 
+            await _context.SaveChangesAsync();
             // Busca todas as manutenções habilitadas
             var manutencoes = await _context.Manutencoes
                 .Where(m => m.habilitado)
@@ -172,7 +172,8 @@ namespace FrotaVisionAPI.Controllers
                     valor_manutencao = 0, // valor inicial
                     horasMotorManutencao = 0, // valor inicial
                     eManuntencaoPreventiva = true,
-                    habilitado = true
+                    habilitado = true,
+                    cnpj = veiculo.cnpj
                 };
 
                 _context.ManutencaoRealizadas.Add(manutencaoRealizada);
@@ -180,7 +181,7 @@ namespace FrotaVisionAPI.Controllers
 
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetVeiculo), new { veiculo.id_veiculo }, veiculo);
+            return CreatedAtAction(nameof(PostVeiculo), new { veiculo.id_veiculo }, veiculo);
         }
 
         [HttpPut("Atualizar/{id}")]

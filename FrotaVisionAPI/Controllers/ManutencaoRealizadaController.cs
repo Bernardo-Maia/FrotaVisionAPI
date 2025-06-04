@@ -84,7 +84,7 @@ namespace FrotaVisionAPI.Controllers
             _context.ManutencaoRealizadas.Add(manutencaoRealizada);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetManutencaoRealizada), new { manutencaoRealizada.id_manutencao_realizada }, manutencaoRealizada);
+            return CreatedAtAction(nameof(PostManutencaoRealizada), new { manutencaoRealizada.id_manutencao_realizada }, manutencaoRealizada);
         }
 
         [HttpPut("Atualizar/{ID}")]

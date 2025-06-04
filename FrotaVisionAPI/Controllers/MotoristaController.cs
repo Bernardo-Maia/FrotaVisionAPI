@@ -80,7 +80,7 @@ namespace FrotaVisionAPI.Controllers
             _context.Motoristas.Add(motorista);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetMotorista), new { motorista.id_motorista }, motorista);
+            return CreatedAtAction(nameof(PostMotorista), new { motorista.id_motorista }, motorista);
         }
 
         [HttpPut("Atualizar/{ID}")]

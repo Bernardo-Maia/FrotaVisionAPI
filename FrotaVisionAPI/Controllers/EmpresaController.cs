@@ -48,7 +48,7 @@ namespace FrotaVisionAPI.Controllers
             _context.Empresas.Add(empresa);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetEmpresa), new { empresa.cnpj }, empresa);
+            return CreatedAtAction(nameof(PostEmpresa), new { empresa.cnpj }, empresa);
         }
 
         /// <summary>

@@ -75,7 +75,7 @@ namespace FrotaVisionAPI.Controllers
 
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetViagem), new { id = viagem.id_viagem }, viagem);
+            return CreatedAtAction(nameof(PostViagem), new { id = viagem.id_viagem }, viagem);
         }
 
         [HttpPut("Atualizar/{id}")]
