@@ -98,8 +98,9 @@ namespace FrotaVisionAPI.Controllers
 
             int countViagens = await _context.Viagens.CountAsync(v => v.id_veiculo == id && v.habilitado == true);
             string? NomeUltimoMotorista = "Sem viagens registradas";
-
-            string?  ultimaViagemData = "Sem viagens registradas";
+            string? ultimaViagemOrigem = "Sem viagens registradas";
+            string? ultimaViagemDestino = "Sem viagens registradas";
+            string? ultimaViagemData = "Sem viagens registradas";
             if (countViagens != 0) {
 
                 Viagem? ultimaViagem = await _context.Viagens
@@ -107,18 +108,17 @@ namespace FrotaVisionAPI.Controllers
                     .OrderByDescending(v => v.data_fim)
                     .FirstOrDefaultAsync();
 
-                ultimaViagemData = await _context.Viagens
-                .Where(v => v.id_veiculo == id && v.habilitado == true)
-                .OrderByDescending(v => v.data_fim)
-                .Select(x => x.data_fim.ToString("dd/MM/yyyy"))
-                .FirstOrDefaultAsync();
-
+                
                 NomeUltimoMotorista = await _context.Motoristas
                 .Where(m => m.id_motorista == ultimaViagem.id_motorista)
                 .Select(m => m.nome)
                 .FirstOrDefaultAsync();
 
-                 
+                ultimaViagemData = ultimaViagem.data_fim.ToString("dd/MM/yyyy");
+                ultimaViagemOrigem = ultimaViagem.origem;
+                ultimaViagemDestino = ultimaViagem.destino;
+
+
             }
 
 
@@ -135,6 +135,8 @@ namespace FrotaVisionAPI.Controllers
                 ultimaMantuenacaoUrgenteData = ultimaManutencaoUrgenteData.ToString("dd/MM/yyyy"),
                 ultimaViagemData = ultimaViagemData,
                 ultimaViagemMotorista = NomeUltimoMotorista,
+                ultimaViagemOrigem = ultimaViagemOrigem,
+                ultimaViagemDestino = ultimaViagemDestino
 
 
             });
