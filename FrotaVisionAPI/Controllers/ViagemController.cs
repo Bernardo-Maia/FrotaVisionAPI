@@ -19,7 +19,7 @@ namespace FrotaVisionAPI.Controllers
         [Route("Listar/{cnpj}")]
         public async Task<ActionResult<IEnumerable<Viagem>>> GetViagem(string cnpj)
         {
-            return await _context.Viagens.Where(x => x.cnpj == cnpj).ToListAsync();
+            return await _context.Viagens.Where(x => x.cnpj == cnpj && x.habilitado == true).ToListAsync();
         }
 
         [HttpGet]
@@ -31,6 +31,7 @@ namespace FrotaVisionAPI.Controllers
             from v in _context.Viagens
             join veic in _context.Veiculos on v.id_veiculo equals veic.id_veiculo
             join mot in _context.Motoristas on v.id_motorista equals mot.id_motorista
+            where v.habilitado == true
             select new
             {
                 v.id_viagem,

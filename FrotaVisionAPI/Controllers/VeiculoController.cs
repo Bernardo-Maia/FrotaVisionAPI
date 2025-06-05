@@ -20,7 +20,7 @@ namespace FrotaVisionAPI.Controllers
         [Route("Listar/{cnpj}")]
         public async Task<ActionResult<IEnumerable<Veiculo>>> GetVeiculo(string cnpj)
         {
-            return await _context.Veiculos.Where(x => x.cnpj == cnpj).ToListAsync();
+            return await _context.Veiculos.Where(x => x.cnpj == cnpj && x.habilitado == true).ToListAsync();
         }
 
         [HttpGet]
@@ -39,7 +39,6 @@ namespace FrotaVisionAPI.Controllers
                 v.apelido,
                 v.placa,
                 v.quilometragem,
-                v.horas_motor,
                 v.ano,
                 v.descricao,
                 tipo = t.nome,
@@ -180,7 +179,6 @@ namespace FrotaVisionAPI.Controllers
                     descricao = manutencao.descricao,
                     data_cadastro = DateTime.UtcNow,
                     valor_manutencao = 0, 
-                    horasMotorManutencao = 0, 
                     eManuntencaoPreventiva = true,
                     habilitado = true,
                     cnpj = veiculo.cnpj

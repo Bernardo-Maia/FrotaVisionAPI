@@ -29,7 +29,8 @@ namespace FrotaVisionAPI.Controllers
                 join m in _context.Manutencoes on mr.id_manutencao equals m.id_manutencao
                 //join vi in _context.Viagens on v.id_veiculo equals vi.id_veiculo
                 where v.cnpj == cnpj
-                && v.habilitado == true
+                && v.habilitado == true 
+                && mr.habilitado == true
                 select new
                 {
                     mr,

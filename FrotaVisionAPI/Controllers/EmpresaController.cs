@@ -23,7 +23,7 @@ namespace FrotaVisionAPI.Controllers
         [SwaggerOperation(Summary = "Lista todas as empresa", Description = "Retorna todas as empresa cadastradas.")]
         public async Task<ActionResult<IEnumerable<Empresa>>> GetEmpresa()
         {
-            return await _context.Empresas.ToListAsync();
+            return await _context.Empresas.Where(x => x.habilitado == true).ToListAsync();
         }
 
         [HttpGet("Pesquisar/{cnpj}")]

@@ -19,7 +19,7 @@ namespace FrotaVisionAPI.Controllers
         [Route("Listar/{cnpj}")]
         public async Task<ActionResult<IEnumerable<Motorista>>> GetMotorista(string cnpj)
         {
-            return await _context.Motoristas.Where(x => x.cnpj == cnpj).ToListAsync();
+            return await _context.Motoristas.Where(x => x.cnpj == cnpj && x.habilitado == true).ToListAsync();
         }
 
         [HttpGet]

@@ -28,7 +28,7 @@ namespace FrotaVisionAPI.Controllers
         [SwaggerOperation(Summary = "Lista todos os usuários", Description = "Retorna todos os usuários cadastrados.")]
         public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios(string cnpj)
         {
-            return await _context.Usuarios.Where(x => x.cnpj == cnpj).ToListAsync();
+            return await _context.Usuarios.Where(x => x.cnpj == cnpj && x.habilitado == true).ToListAsync();
         }
 
         [HttpGet]

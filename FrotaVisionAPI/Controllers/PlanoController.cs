@@ -22,8 +22,6 @@ namespace FrotaVisionAPI.Controllers
         public async Task<ActionResult<IEnumerable<Plano>>> GetPlano()
         {
             List<Plano> planos = await _context.Planos.ToListAsync();
-            if (planos == null)
-                return NotFound(new { message = "Nenhum tipo de caminhão encontrado" });
             return Ok(planos);
         }
 

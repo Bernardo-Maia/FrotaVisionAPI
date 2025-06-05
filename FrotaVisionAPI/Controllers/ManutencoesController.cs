@@ -18,7 +18,7 @@ namespace FrotaVisionAPI.Controllers
         [Route("Listar")]
         public async Task<ActionResult<IEnumerable<Manutencao>>> GetManutencao()
         {
-            return await _context.Manutencoes.ToListAsync();
+            return await _context.Manutencoes.Where(x => x.habilitado == true).ToListAsync();
         }
 
     }

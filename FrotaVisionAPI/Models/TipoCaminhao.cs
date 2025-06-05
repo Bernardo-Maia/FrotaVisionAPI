@@ -11,7 +11,6 @@ namespace FrotaVisionAPI.Models
         public int id { get; set; }
 
         public string nome { get; set; }
-        public bool usaHorasMotor { get; set; }
         public bool habilitado { get; set; }
         public DateTime data_cadastro { get; set; }
 

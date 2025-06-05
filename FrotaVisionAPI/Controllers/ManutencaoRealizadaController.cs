@@ -19,7 +19,7 @@ namespace FrotaVisionAPI.Controllers
         [Route("Listar/{cnpj}")]
         public async Task<ActionResult<IEnumerable<ManutencaoRealizada>>> GetManutencaoRealizada(string cnpj)
         {
-            return await _context.ManutencaoRealizadas.Where(x => x.cnpj == cnpj) .ToListAsync();
+            return await _context.ManutencaoRealizadas.Where(x => x.cnpj == cnpj && x.habilitado == true) .ToListAsync();
         }
 
         [HttpGet]
@@ -43,7 +43,6 @@ namespace FrotaVisionAPI.Controllers
                 descricaoRealizada = mr.descricao,
                 mr.data_cadastro,
                 mr.valor_manutencao,
-                mr.horasMotorManutencao,
                 mr.eManuntencaoPreventiva,
                 v.apelido,
                 tipo = t.nome,

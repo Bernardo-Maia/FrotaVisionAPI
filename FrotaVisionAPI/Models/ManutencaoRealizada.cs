@@ -15,7 +15,6 @@ namespace FrotaVisionAPI.Models
         public int id_manutencao { get; set; }
         public DateTime data_cadastro { get; set; }
         public double valor_manutencao { get; set; }
-        public double horasMotorManutencao { get; set; }
         public bool eManuntencaoPreventiva { get; set; }
         public bool habilitado { get; set; }
         public string cnpj { get; set; }
