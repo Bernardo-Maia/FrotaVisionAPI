@@ -1,20 +1,16 @@
-using Microsoft.EntityFrameworkCore;
-using FrotaVisionAPI.Models;
 using FrotaVisionAPI;
+using FrotaVisionAPI.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-
-
-//builder.Services.AddDbContext<AppDBContext>(options =>
-//    options.UseMySql(builder.Configuration.GetConnectionString("MySqlDatabase"),
-//        new MySqlServerVersion(new Version(8, 0, 41)) // Ajuste para a versão do seu MySQL
-//    )
-//);
 
 
 builder.Services.AddDbContext<AppDBContext>(options =>
@@ -27,7 +23,7 @@ builder.Services.AddDbContext<AppDBContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 builder.Services.AddCors(options =>
 {
@@ -39,6 +35,34 @@ builder.Services.AddCors(options =>
                   .AllowAnyMethod();
         });
 });
+
+
+
+// JWT
+var jwtConfig = builder.Configuration.GetSection("Jwt");
+var key = Encoding.UTF8.GetBytes(jwtConfig["Key"]);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtConfig["Issuer"],
+        ValidAudience = jwtConfig["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(key)
+    };
+});
+
+builder.Services.AddAuthorization();
+
 
 
 
@@ -54,6 +78,8 @@ var app = builder.Build();
 app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

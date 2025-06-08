@@ -14,10 +14,12 @@ namespace FrotaVisionAPI.Controllers
     {
        
         private readonly AppDBContext _context;
+        private readonly IConfiguration _config;
 
-        public UsuarioController(AppDBContext context)
+        public UsuarioController(AppDBContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
 
         /// <summary>
@@ -163,6 +165,27 @@ namespace FrotaVisionAPI.Controllers
 
             });
         }
+
+        [HttpPost("loginJWT")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        {
+            var usuario = await _context.Usuarios
+                .FirstOrDefaultAsync(u => u.email == request.Email);
+
+            if (usuario == null || !PasswordHasher.VerifyPassword(request.Password, usuario.senha))
+                return Unauthorized(new { message = "Email ou senha inválidos." });
+
+            var token = JwtHelper.GenerateToken(usuario, _config);
+            return Ok(new
+            {
+                token,
+                usuario.id_usuario,
+                usuario.email,
+                usuario.permissoes_usuario,
+                usuario.cnpj
+            });
+        }
+
 
     }
 }
