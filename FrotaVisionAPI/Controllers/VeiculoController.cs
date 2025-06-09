@@ -79,22 +79,33 @@ namespace FrotaVisionAPI.Controllers
 
             NotificacaoController notificacaoController = new NotificacaoController(_context);
 
-            ActionResult<IEnumerable<Notificacao>> notificacoes = await notificacaoController.GerarNotificacoes(cnpj);
+            ActionResult<IEnumerable<Notificacao>>? notificacoes = await notificacaoController.GerarNotificacoes(cnpj);
+
+            IEnumerable<Notificacao> notificacoescount = notificacoes.Value.Where(x => x.id_veiculo == id);
 
             Notificacao? ultimaNotificacao = notificacoes.Value.OrderBy(x => x.quilometragemManutencao).FirstOrDefault(x => x.id_veiculo == id);
 
-            string? ultimaManutencaoUrgenteNome = await _context.Manutencoes
+            string? ultimaManutencaoUrgenteNome = "Sem manutenção urgente";
+            DateTime ultimaManutencaoUrgenteData;
+            string ultimaManutencaoUrgenteDataString = "Sem manutenção urgente";
+
+            if (ultimaNotificacao != null) { 
+
+             ultimaManutencaoUrgenteNome = await _context.Manutencoes
                 .Where(m => m.id_manutencao == ultimaNotificacao.id_manutencao)
                 .Select(m => m.nome)
                 .FirstOrDefaultAsync();
 
-            DateTime ultimaManutencaoUrgenteData = await _context.ManutencaoRealizadas
+             ultimaManutencaoUrgenteData = await _context.ManutencaoRealizadas
                 .Where(m => m.id_manutencao_realizada == ultimaNotificacao.idManutencaoRealizada && m.habilitado == true)
                 .OrderByDescending(m => m.data_manutencao)
                 .Select(m => m.data_manutencao)
                 .FirstOrDefaultAsync();
 
-            IEnumerable<Notificacao> notificacoescount = notificacoes.Value.Where(x => x.id_veiculo == id);
+
+                ultimaManutencaoUrgenteDataString = ultimaManutencaoUrgenteData.ToString("dd/MM/yyyy");
+
+            }
 
             int countViagens = await _context.Viagens.CountAsync(v => v.id_veiculo == id && v.habilitado == true);
             string? NomeUltimoMotorista = "Sem viagens registradas";
@@ -132,7 +143,7 @@ namespace FrotaVisionAPI.Controllers
                 nomeUltimaManitencao = nomeUltimaManutencao,
                 dataUltimaManutecao = ultimaManutencao.data_manutencao.ToString("dd/MM/yyyy"),
                 ultimaManutencaoUrgenteNome = ultimaManutencaoUrgenteNome,
-                ultimaMantuenacaoUrgenteData = ultimaManutencaoUrgenteData.ToString("dd/MM/yyyy"),
+                ultimaMantuenacaoUrgenteData = ultimaManutencaoUrgenteDataString,
                 ultimaViagemData = ultimaViagemData,
                 ultimaViagemMotorista = NomeUltimoMotorista,
                 ultimaViagemOrigem = ultimaViagemOrigem,
