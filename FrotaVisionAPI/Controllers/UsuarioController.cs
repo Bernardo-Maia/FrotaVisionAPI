@@ -154,7 +154,7 @@ namespace FrotaVisionAPI.Controllers
                 return Unauthorized(new { message = "Usuário não encontrado" });
 
             // Verifica se a senha informada corresponde ao hash armazenado
-            if (!PasswordHasher.VerifyPassword(/*request.Password*/ senha , usuario.senha))
+            if (!PasswordHasher.VerifyPassword( senha , usuario.senha))
                 return Unauthorized(new { message = "Senha incorreta" });
 
             return Ok(new { message = "Login realizado com sucesso!",

@@ -44,11 +44,13 @@ namespace FrotaVisionAPI.Controllers
                 mr.data_cadastro,
                 mr.valor_manutencao,
                 mr.eManuntencaoPreventiva,
+                v.id_veiculo,
                 v.apelido,
                 tipo = t.nome,
                 v.placa,
                 v.quilometragem,
                 descricaoManutencao = m.descricao,
+                m.id_manutencao,
                 manutenção = m.nome
 
             }).ToListAsync());
