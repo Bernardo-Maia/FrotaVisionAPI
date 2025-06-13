@@ -47,6 +47,7 @@ namespace FrotaVisionAPI.Controllers
                     u.nome_usuario,
                     u.email,
                     u.cnpj,
+                    u.permissoes_usuario,
                     nomePermissao = p.nome,
                     p.descricao
                 }

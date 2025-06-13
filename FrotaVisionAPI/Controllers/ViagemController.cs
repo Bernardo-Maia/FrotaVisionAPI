@@ -23,15 +23,15 @@ namespace FrotaVisionAPI.Controllers
         }
 
         [HttpGet]
-        [Route("ListarDetalhado")]
-        public async Task<ActionResult<IEnumerable<object>>> GetViagemDetalhada()
+        [Route("ListarDetalhado/{cnpj}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetViagemDetalhada(string cnpj)
         {
 
             return Ok(await (
             from v in _context.Viagens
             join veic in _context.Veiculos on v.id_veiculo equals veic.id_veiculo
             join mot in _context.Motoristas on v.id_motorista equals mot.id_motorista
-            where v.habilitado == true
+            where v.habilitado == true && v.cnpj == cnpj
             select new
             {
                 v.id_viagem,
@@ -43,8 +43,10 @@ namespace FrotaVisionAPI.Controllers
                 placa_veiculo = veic.placa,
                 v.origem,
                 v.destino,
-                v.descricao
-
+                v.descricao,
+                v.id_veiculo,
+                v.id_motorista
+                
             }).ToListAsync());
         }
 
