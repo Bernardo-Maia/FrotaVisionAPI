@@ -31,29 +31,28 @@ namespace FrotaVisionAPI.Controllers
             {
 
                 return Ok(await (
-                    from m in _context.Motoristas
-                    where m.habilitado == true && m.cnpj == cnpj
+                from m in _context.Motoristas
+                where m.habilitado == true && m.cnpj == cnpj
 
-                    // Viagem mais recente de cada motorista
-                    let ultimaViagem = (
-                        from v in _context.Viagens
-                        where v.id_motorista == m.id_motorista
-                        orderby v.data_fim descending
-                        select v
-                    ).FirstOrDefault()
+                let ultimaViagem = (
+                    from v in _context.Viagens
+                    where v.id_motorista == m.id_motorista
+                    orderby v.data_fim descending
+                    select v
+                ).FirstOrDefault()
 
-                    join ve in _context.Veiculos on ultimaViagem.id_veiculo equals ve.id_veiculo into veiculoJoin
-                    from veiculo in veiculoJoin.DefaultIfEmpty()
+                join ve in _context.Veiculos on ultimaViagem != null ? ultimaViagem.id_veiculo : 0 equals ve.id_veiculo into veiculoJoin
+                from veiculo in veiculoJoin.DefaultIfEmpty()
 
-                    select new
-                    {
-                        m.id_motorista,
-                        m.nome,
-                        data_ultima_viagem = ultimaViagem.data_fim,
-                        veiculo.placa,
-                        veiculo.apelido
-                    }
-                ).ToListAsync());
+                select new
+                {
+                    m.id_motorista,
+                    m.nome,
+                    data_ultima_viagem = ultimaViagem != null ? ultimaViagem.data_fim : (DateTime?)null,
+                    placa = veiculo != null ? veiculo.placa : null,
+                    apelido = veiculo != null ? veiculo.apelido : null
+                }
+            ).ToListAsync());
             }
             catch
             {
