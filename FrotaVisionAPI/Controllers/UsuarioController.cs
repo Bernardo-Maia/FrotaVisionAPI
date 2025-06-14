@@ -104,15 +104,37 @@ namespace FrotaVisionAPI.Controllers
         /// <summary>
         /// Atualiza um usuário pelo ID.
         /// </summary>
+       
+
         [HttpPut("Atualizar/{id}")]
         [SwaggerOperation(Summary = "Atualiza um usuário", Description = "Edita os dados de um usuário existente.")]
-        public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
+        public async Task<IActionResult> PutUsuarioNovo(int id, [FromBody] Usuario usuario, [FromQuery] bool trocarSenha)
         {
             if (id != usuario.id_usuario)
                 return BadRequest(new { message = "ID do usuário não corresponde ao informado" });
 
-            usuario.senha = PasswordHasher.HashPassword(usuario.senha);
-            _context.Entry(usuario).State = EntityState.Modified;
+            Usuario? usuarioExistente = await _context.Usuarios.FindAsync(id);
+            if (usuarioExistente == null)
+                return NotFound(new { message = "Usuário não encontrado" });
+
+            // Atualiza os campos permitidos
+            usuarioExistente.id_usuario = usuario.id_usuario;
+            usuarioExistente.email = usuario.email;
+            usuarioExistente.nome_usuario = usuario.nome_usuario;
+            usuarioExistente.cnpj = usuario.cnpj;
+            usuarioExistente.permissoes_usuario = usuario.permissoes_usuario;
+            usuarioExistente.data_cadastro = usuario.data_cadastro;
+
+
+
+            // Atualiza a senha apenas se a flag trocarSenha for true
+            if (trocarSenha)
+            {
+                if (string.IsNullOrWhiteSpace(usuario.senha))
+                    return BadRequest(new { message = "A nova senha deve ser informada se for trocar." });
+
+                usuarioExistente.senha = PasswordHasher.HashPassword(usuario.senha);
+            }
 
             try
             {
@@ -120,13 +142,10 @@ namespace FrotaVisionAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.Usuarios.Any(e => e.id_usuario == id))
-                    return NotFound(new { message = "Usuário não encontrado" });
-
-                throw;
+                return StatusCode(500, new { message = "Erro ao atualizar o usuário." });
             }
 
-            return Ok(new { message = "Usuário atualizado com sucesso", usuario = usuario });
+            return Ok(new { message = "Usuário atualizado com sucesso", usuario = usuarioExistente });
         }
 
         /// <summary>
