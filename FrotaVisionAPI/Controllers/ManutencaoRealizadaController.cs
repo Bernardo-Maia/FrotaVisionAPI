@@ -51,7 +51,7 @@ namespace FrotaVisionAPI.Controllers
                 v.quilometragem,
                 descricaoManutencao = m.descricao,
                 m.id_manutencao,
-                manutenção = m.nome
+                manutencao = m.nome
 
             }).ToListAsync());
         }

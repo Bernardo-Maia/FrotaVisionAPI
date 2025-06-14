@@ -50,7 +50,8 @@ namespace FrotaVisionAPI.Controllers
                     m.nome,
                     data_ultima_viagem = ultimaViagem != null ? ultimaViagem.data_fim : (DateTime?)null,
                     placa = veiculo != null ? veiculo.placa : null,
-                    apelido = veiculo != null ? veiculo.apelido : null
+                    apelido = veiculo != null ? veiculo.apelido : null,
+                    m.data_cadastro,
                 }
             ).ToListAsync());
             }
