@@ -67,6 +67,18 @@ namespace FrotaVisionAPI.Controllers
             return usuario;
         }
 
+
+        [HttpGet("PesquisarEmail/{email}")]
+        [SwaggerOperation(Summary = "Obtém um usuário", Description = "Retorna um usuário pelo ID informado.")]
+        public async Task<ActionResult<Usuario>> GetUsuarioByEmail(string email)
+        {
+            Usuario? usuario = await _context.Usuarios.Where(x => x.email == email).FirstOrDefaultAsync();
+            if (usuario == null)
+                return NotFound(new { message = "Usuário não encontrado" });
+
+            return usuario;
+        }
+
         /// <summary>
         /// Cadastra um novo usuário.
         /// </summary>
