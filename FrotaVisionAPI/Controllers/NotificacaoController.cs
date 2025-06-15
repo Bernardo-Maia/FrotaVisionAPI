@@ -72,7 +72,7 @@ namespace FrotaVisionAPI.Controllers
                         urgencia = maisRecente.v.quilometragem >= kmLimite,
                         tipo_caminhao = tipoCaminhao.nome,
                         descricao_manutencao = maisRecente.m.descricao,
-                        idManutencaoRealizada = maisRecente.mr.id_manutencao,
+                        idManutencaoRealizada = maisRecente.mr.id_manutencao_realizada,
                         data_Manutencao = maisRecente.mr.data_manutencao
                     };
                 })

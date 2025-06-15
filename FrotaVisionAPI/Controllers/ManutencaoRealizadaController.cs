@@ -19,7 +19,7 @@ namespace FrotaVisionAPI.Controllers
         [Route("Listar/{cnpj}")]
         public async Task<ActionResult<IEnumerable<ManutencaoRealizada>>> GetManutencaoRealizada(string cnpj)
         {
-            return await _context.ManutencaoRealizadas.Where(x => x.cnpj == cnpj && x.habilitado == true) .ToListAsync();
+            return await _context.ManutencaoRealizadas.Where(x => x.cnpj == cnpj && x.habilitado == true && x.quilometragem_ultima_manutencao > 0) .ToListAsync();
         }
 
         [HttpGet]
@@ -34,6 +34,7 @@ namespace FrotaVisionAPI.Controllers
             where v.habilitado == true
             where mr.habilitado == true
             where v.cnpj == cnpj
+            where mr.quilometragem_ultima_manutencao > 0
             select new
             {
                 mr.id_manutencao_realizada,
@@ -69,7 +70,7 @@ namespace FrotaVisionAPI.Controllers
         [HttpGet("PesquisarPorVeiculo/{IDVeiculo}")]
         public async Task<ActionResult<IEnumerable<ManutencaoRealizada>>> GetManutencaoRealizadaVeiculo(int IDVeiculo)
         {
-            List<ManutencaoRealizada> manutencaoRealizada = await _context.ManutencaoRealizadas.Where(x => x.id_veiculo == IDVeiculo).ToListAsync();
+            List<ManutencaoRealizada> manutencaoRealizada = await _context.ManutencaoRealizadas.Where(x => x.id_veiculo == IDVeiculo && x.habilitado == true && x.quilometragem_ultima_manutencao > 0   ).ToListAsync();
 
             if (manutencaoRealizada == null)
                 return NotFound(new { message = "Nenhuma manutenção para o veiculo" });
