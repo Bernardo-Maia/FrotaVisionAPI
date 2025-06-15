@@ -1,7 +1,6 @@
 ﻿using FrotaVisionAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NuGet.LibraryModel;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrotaVisionAPI.Controllers
@@ -73,7 +72,8 @@ namespace FrotaVisionAPI.Controllers
 
             string? nomeUltimaManutencao = "Sem manutenção registrada";
             string? dataUltimaManutencao = "Sem manutenção registrada";
-            if (ultimaManutencao != null) {
+            if (ultimaManutencao != null)
+            {
                 nomeUltimaManutencao = await _context.Manutencoes
                     .Where(m => m.id_manutencao == ultimaManutencao.id_manutencao)
                     .Select(m => m.nome)
@@ -81,7 +81,7 @@ namespace FrotaVisionAPI.Controllers
 
                 dataUltimaManutencao = ultimaManutencao.data_manutencao.ToString("dd/MM/yyyy");
 
-                    }
+            }
             NotificacaoController notificacaoController = new NotificacaoController(_context);
 
             ActionResult<IEnumerable<Notificacao>>? notificacoes = await notificacaoController.GerarNotificacoes(cnpj);
@@ -94,18 +94,19 @@ namespace FrotaVisionAPI.Controllers
             DateTime ultimaManutencaoUrgenteData;
             string ultimaManutencaoUrgenteDataString = "Sem manutenção urgente";
 
-            if (ultimaNotificacao != null) { 
+            if (ultimaNotificacao != null)
+            {
 
-             ultimaManutencaoUrgenteNome = await _context.Manutencoes
-                .Where(m => m.id_manutencao == ultimaNotificacao.id_manutencao)
-                .Select(m => m.nome)
-                .FirstOrDefaultAsync();
+                ultimaManutencaoUrgenteNome = await _context.Manutencoes
+                   .Where(m => m.id_manutencao == ultimaNotificacao.id_manutencao)
+                   .Select(m => m.nome)
+                   .FirstOrDefaultAsync();
 
-             ultimaManutencaoUrgenteData = await _context.ManutencaoRealizadas
-                .Where(m => m.id_manutencao_realizada == ultimaNotificacao.idManutencaoRealizada && m.habilitado == true)
-                .OrderByDescending(m => m.data_manutencao)
-                .Select(m => m.data_manutencao)
-                .FirstOrDefaultAsync();
+                ultimaManutencaoUrgenteData = await _context.ManutencaoRealizadas
+                   .Where(m => m.id_manutencao_realizada == ultimaNotificacao.idManutencaoRealizada && m.habilitado == true)
+                   .OrderByDescending(m => m.data_manutencao)
+                   .Select(m => m.data_manutencao)
+                   .FirstOrDefaultAsync();
 
 
                 ultimaManutencaoUrgenteDataString = ultimaManutencaoUrgenteData.ToString("dd/MM/yyyy");
@@ -117,14 +118,15 @@ namespace FrotaVisionAPI.Controllers
             string? ultimaViagemOrigem = "Sem viagens registradas";
             string? ultimaViagemDestino = "Sem viagens registradas";
             string? ultimaViagemData = "Sem viagens registradas";
-            if (countViagens != 0) {
+            if (countViagens != 0)
+            {
 
                 Viagem? ultimaViagem = await _context.Viagens
                     .Where(v => v.id_veiculo == id && v.habilitado == true)
                     .OrderByDescending(v => v.data_fim)
                     .FirstOrDefaultAsync();
 
-                
+
                 NomeUltimoMotorista = await _context.Motoristas
                 .Where(m => m.id_motorista == ultimaViagem.id_motorista)
                 .Select(m => m.nome)
@@ -156,12 +158,12 @@ namespace FrotaVisionAPI.Controllers
 
 
             });
-            
+
         }
 
 
-        [HttpPost("Cadastrar/{IDUsuario}")]
-        public async Task<ActionResult<Veiculo>> PostVeiculo(Veiculo veiculo, int IDUsuario)
+        [HttpPost("Cadastrar")]
+        public async Task<ActionResult<Veiculo>> PostVeiculo(Veiculo veiculo)
         {
 
             int? planoEmpresa = _context.Empresas.FindAsync(veiculo.cnpj).Result?.id_plano ?? 0;
@@ -196,7 +198,7 @@ namespace FrotaVisionAPI.Controllers
                     quilometragem_ultima_manutencao = 0,
                     descricao = manutencao.descricao,
                     data_cadastro = DateTime.UtcNow,
-                    valor_manutencao = 0, 
+                    valor_manutencao = 0,
                     eManuntencaoPreventiva = true,
                     habilitado = true,
                     cnpj = veiculo.cnpj
