@@ -200,11 +200,7 @@ namespace FrotaVisionAPI.Controllers
             var token = JwtHelper.GenerateToken(usuario, _config);
             return Ok(new
             {
-                token,
-                usuario.id_usuario,
-                usuario.email,
-                usuario.permissoes_usuario,
-                usuario.cnpj
+                token
             });
         }
 

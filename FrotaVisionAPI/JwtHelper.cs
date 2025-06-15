@@ -13,6 +13,7 @@ public static class JwtHelper
         {
             new Claim(ClaimTypes.NameIdentifier, usuario.id_usuario.ToString()),
             new Claim(ClaimTypes.Email, usuario.email),
+            new Claim(ClaimTypes.Name, usuario.nome_usuario),
             new Claim("Permissao", usuario.permissoes_usuario.ToString()),
             new Claim("Cnpj", usuario.cnpj ?? "")
         };
