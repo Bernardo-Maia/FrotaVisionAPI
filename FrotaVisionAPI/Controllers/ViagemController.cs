@@ -111,7 +111,15 @@ namespace FrotaVisionAPI.Controllers
             if (viagem == null)
                 return NotFound(new { message = "Viagem não encontrada" });
 
+            Veiculo? veiculo = await _context.Veiculos.FindAsync(viagem.id_veiculo);
+            if (veiculo == null)
+                return NotFound("Veículo não encontrado.");
+
+            veiculo.quilometragem -= viagem.quilometragem_viagem;
+
             viagem.habilitado = false;
+
+            _context.Veiculos.Update(veiculo);
             _context.Entry(viagem).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
