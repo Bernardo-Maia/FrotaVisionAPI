@@ -11,9 +11,9 @@ public static class JwtHelper
         var key = Encoding.UTF8.GetBytes(config["Jwt:Key"]);
         var claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, usuario.id_usuario.ToString()),
-            new Claim(ClaimTypes.Email, usuario.email),
-            new Claim(ClaimTypes.Name, usuario.nome_usuario),
+            new Claim("ID", usuario.id_usuario.ToString()),
+            new Claim("Email", usuario.email),
+            new Claim("Nome", usuario.nome_usuario),
             new Claim("Permissao", usuario.permissoes_usuario.ToString()),
             new Claim("Cnpj", usuario.cnpj ?? "")
         };
