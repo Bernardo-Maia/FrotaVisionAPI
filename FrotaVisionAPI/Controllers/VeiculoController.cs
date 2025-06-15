@@ -65,7 +65,7 @@ namespace FrotaVisionAPI.Controllers
             string cnpj = veiculo.cnpj;
 
 
-            int countManutencao = await _context.ManutencaoRealizadas.CountAsync(mr => mr.habilitado == true && mr.id_veiculo == id);
+            int countManutencao = await _context.ManutencaoRealizadas.CountAsync(mr => mr.habilitado == true && mr.id_veiculo == id && mr.quilometragem_ultima_manutencao > 0);
 
             ManutencaoRealizada? ultimaManutencao = await _context.ManutencaoRealizadas
                 .Where(m => m.id_veiculo == id && m.habilitado == true)
