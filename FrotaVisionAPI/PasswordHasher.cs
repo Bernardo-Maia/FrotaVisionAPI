@@ -1,6 +1,4 @@
-﻿using BCrypt.Net;
-
-namespace FrotaVisionAPI
+﻿namespace FrotaVisionAPI
 {
     public static class PasswordHasher
 

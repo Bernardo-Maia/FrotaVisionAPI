@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
-using System.Numerics;
 
 namespace FrotaVisionAPI.Controllers
 {
@@ -12,7 +10,7 @@ namespace FrotaVisionAPI.Controllers
     [Route("api/[controller]")]
     public class UsuarioController : ControllerBase
     {
-       
+
         private readonly AppDBContext _context;
         private readonly IConfiguration _config;
 
@@ -104,7 +102,7 @@ namespace FrotaVisionAPI.Controllers
         /// <summary>
         /// Atualiza um usuário pelo ID.
         /// </summary>
-       
+
 
         [HttpPut("Atualizar/{id}")]
         [SwaggerOperation(Summary = "Atualiza um usuário", Description = "Edita os dados de um usuário existente.")]
@@ -169,17 +167,19 @@ namespace FrotaVisionAPI.Controllers
         }
 
         [HttpPost("login/{login},{senha}")]
-        public async Task<IActionResult> Login( string login, string senha)
+        public async Task<IActionResult> Login(string login, string senha)
         {
             Usuario? usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.email == login);
             if (usuario == null || usuario.habilitado == false)
                 return Unauthorized(new { message = "Usuário não encontrado" });
 
             // Verifica se a senha informada corresponde ao hash armazenado
-            if (!PasswordHasher.VerifyPassword( senha , usuario.senha))
+            if (!PasswordHasher.VerifyPassword(senha, usuario.senha))
                 return Unauthorized(new { message = "Senha incorreta" });
 
-            return Ok(new { message = "Login realizado com sucesso!",
+            return Ok(new
+            {
+                message = "Login realizado com sucesso!",
                 id = usuario.id_usuario,
                 nome = usuario.nome_usuario,
                 cnpj = usuario.cnpj,

@@ -1,6 +1,5 @@
 ﻿using FrotaVisionAPI.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace FrotaVisionAPI
 {
@@ -15,14 +14,14 @@ namespace FrotaVisionAPI
         public DbSet<Motorista> Motoristas { get; set; }
         public DbSet<Viagem> Viagens { get; set; }
         public DbSet<ManutencaoRealizada> ManutencaoRealizadas { get; set; }
-        public DbSet<Manutencao> Manutencoes{ get; set; }
+        public DbSet<Manutencao> Manutencoes { get; set; }
         public DbSet<TipoCaminhao> TiposCaminhoes { get; set; }
         public DbSet<Permissao> Permissoes { get; set; }
 
-        public DbSet<Models.Plano> Planos{ get; set; }
+        public DbSet<Models.Plano> Planos { get; set; }
 
-        
-        
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Usuario>().ToTable("usuario");

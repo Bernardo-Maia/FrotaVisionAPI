@@ -81,7 +81,7 @@ namespace FrotaVisionAPI.Controllers
         /// <summary>
         /// Exclui um empresa pelo ID.
         /// </summary>
-      
+
 
         [HttpDelete("Deletar/{cnpj}")]
         [SwaggerOperation(Summary = "Remove uma empresa", Description = "Deleta uma empresa do banco de dados.")]

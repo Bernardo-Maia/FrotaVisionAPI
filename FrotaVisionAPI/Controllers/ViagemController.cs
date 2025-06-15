@@ -46,7 +46,7 @@ namespace FrotaVisionAPI.Controllers
                 v.descricao,
                 v.id_veiculo,
                 v.id_motorista
-                
+
             }).ToListAsync());
         }
 

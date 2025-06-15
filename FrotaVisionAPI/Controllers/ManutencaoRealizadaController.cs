@@ -19,7 +19,7 @@ namespace FrotaVisionAPI.Controllers
         [Route("Listar/{cnpj}")]
         public async Task<ActionResult<IEnumerable<ManutencaoRealizada>>> GetManutencaoRealizada(string cnpj)
         {
-            return await _context.ManutencaoRealizadas.Where(x => x.cnpj == cnpj && x.habilitado == true && x.quilometragem_ultima_manutencao > 0) .ToListAsync();
+            return await _context.ManutencaoRealizadas.Where(x => x.cnpj == cnpj && x.habilitado == true && x.quilometragem_ultima_manutencao > 0).ToListAsync();
         }
 
         [HttpGet]
@@ -70,7 +70,7 @@ namespace FrotaVisionAPI.Controllers
         [HttpGet("PesquisarPorVeiculo/{IDVeiculo}")]
         public async Task<ActionResult<IEnumerable<ManutencaoRealizada>>> GetManutencaoRealizadaVeiculo(int IDVeiculo)
         {
-            List<ManutencaoRealizada> manutencaoRealizada = await _context.ManutencaoRealizadas.Where(x => x.id_veiculo == IDVeiculo && x.habilitado == true && x.quilometragem_ultima_manutencao > 0   ).ToListAsync();
+            List<ManutencaoRealizada> manutencaoRealizada = await _context.ManutencaoRealizadas.Where(x => x.id_veiculo == IDVeiculo && x.habilitado == true && x.quilometragem_ultima_manutencao > 0).ToListAsync();
 
             if (manutencaoRealizada == null)
                 return NotFound(new { message = "Nenhuma manutenção para o veiculo" });
@@ -103,7 +103,7 @@ namespace FrotaVisionAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.ManutencaoRealizadas.Any(e => e.id_manutencao_realizada  == ID))
+                if (!_context.ManutencaoRealizadas.Any(e => e.id_manutencao_realizada == ID))
                     return NotFound(new { message = "ManutencaoRealizada não encontrado" });
 
                 throw;
@@ -131,5 +131,5 @@ namespace FrotaVisionAPI.Controllers
     }
 
 
-    
+
 }

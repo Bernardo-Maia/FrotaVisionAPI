@@ -96,7 +96,7 @@ namespace FrotaVisionAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.Motoristas.Any(e => e.id_motorista  == ID))
+                if (!_context.Motoristas.Any(e => e.id_motorista == ID))
                     return NotFound(new { message = "Motorista não encontrado" });
 
                 throw;
