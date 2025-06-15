@@ -68,15 +68,20 @@ namespace FrotaVisionAPI.Controllers
             int countManutencao = await _context.ManutencaoRealizadas.CountAsync(mr => mr.habilitado == true && mr.id_veiculo == id && mr.quilometragem_ultima_manutencao > 0);
 
             ManutencaoRealizada? ultimaManutencao = await _context.ManutencaoRealizadas
-                .Where(m => m.id_veiculo == id && m.habilitado == true)
+                .Where(m => m.id_veiculo == id && m.habilitado == true && m.quilometragem_ultima_manutencao > 0)
                 .OrderByDescending(m => m.data_manutencao).FirstOrDefaultAsync();
 
-            string? nomeUltimaManutencao = await _context.Manutencoes
-                .Where(m => m.id_manutencao == ultimaManutencao.id_manutencao)
-                .Select(m => m.nome)
-                .FirstOrDefaultAsync();
+            string? nomeUltimaManutencao = "Sem manutenção registrada";
+            string? dataUltimaManutencao = "Sem manutenção registrada";
+            if (ultimaManutencao != null) {
+                nomeUltimaManutencao = await _context.Manutencoes
+                    .Where(m => m.id_manutencao == ultimaManutencao.id_manutencao)
+                    .Select(m => m.nome)
+                    .FirstOrDefaultAsync();
 
+                dataUltimaManutencao = ultimaManutencao.data_manutencao.ToString("dd/MM/yyyy");
 
+                    }
             NotificacaoController notificacaoController = new NotificacaoController(_context);
 
             ActionResult<IEnumerable<Notificacao>>? notificacoes = await notificacaoController.GerarNotificacoes(cnpj);
@@ -141,7 +146,7 @@ namespace FrotaVisionAPI.Controllers
                 countViagens = countViagens,
                 countUrgente = notificacoescount.Count(),
                 nomeUltimaManitencao = nomeUltimaManutencao,
-                dataUltimaManutecao = ultimaManutencao.data_manutencao.ToString("dd/MM/yyyy"),
+                dataUltimaManutecao = dataUltimaManutencao,
                 ultimaManutencaoUrgenteNome = ultimaManutencaoUrgenteNome,
                 ultimaMantuenacaoUrgenteData = ultimaManutencaoUrgenteDataString,
                 ultimaViagemData = ultimaViagemData,
